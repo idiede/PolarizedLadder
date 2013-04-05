@@ -19,6 +19,7 @@ public AIPlayer(String playerName, char playerToken, int discs, Board board) {
 private boolean move(){
 	
 	//take a move
+	//add a comment
 	
 	return false;
 	
