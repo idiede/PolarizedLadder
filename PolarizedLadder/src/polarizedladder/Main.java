@@ -16,7 +16,7 @@ public static void main(String[] args) {
 		WinPatternStrategy detectWin= new WinPatternStrategy(board);
 		int gameType = game.displayMainMenu();
 	    Player[] players = game.setGameType(gameType, board,detectWin);
-		game.startGame(game,board, players, detectWin);
+		game.startGame(game,board, players, detectWin, gameType);
 		
 		}
 }
