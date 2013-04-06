@@ -7,12 +7,12 @@ package polarizedladder;
 
 import java.awt.Point;
 
-public class WinPatternStrategy 
+public class WinPatternStrategy extends GameHeuristics
 {
 	private Board board;
 	private String[][] boardState;
 		
-	private Point winPatterns[][] = { 			
+/*	private Point winPatterns[][] = { 			
 			{new Point(0,0), new Point(1,0), new Point (1,1), new Point (2,1) , new Point (2,2)},			//  right ladder patterns
 			{new Point(-1,0), new Point(0,0), new Point (0,1), new Point (1,1) , new Point (1,2)},
 			{new Point (-1,-1), new Point (0,-1), new Point(0,0), new Point(1,0), new Point (1,1)},
@@ -23,7 +23,7 @@ public class WinPatternStrategy
 			{new Point (1,-1), new Point (0,-1), new Point(0,0), new Point(-1,0), new Point (-1,1)},
 			{new Point (2,-1), new Point (1,-1), new Point (1,0), new Point(0,0), new Point(0,1)},
 			{new Point (2,-2),  new Point (1,-2), new Point (1,-1), new Point(0,-1), new Point(0,0)},
-	};
+	};*/
 	
 	private Point leftSidePolarity[] = { new Point(1,1), new Point(2,2), new Point(3,3), 
 			new Point(4,4), new Point(5,5), new Point(6,6), new Point(7,7)};
