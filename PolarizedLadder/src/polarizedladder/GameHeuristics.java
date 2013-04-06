@@ -18,9 +18,12 @@ public class GameHeuristics
 			{new Point (2,-2),  new Point (1,-2), new Point (1,-1), new Point(0,-1), new Point(0,0)},
 		};
 	
-	public int numberOfPossibleLadders(Player p, Player o, Board b)
+	private int[] ladderDiscWeights = {0, 1, 11, 111, 1111, 11111};		// weights for 0, 1, 2, 3, 4, or 5 ladder discs
+	
+	public int calculate(Player p, Player o, Board b)
 	{		
-		int heuristicScore	 = 0;							 
+		int numPossLadders	 = 0;	// heuristic: player possible ladders - opponent possible ladders
+		int ladderDiscs		 = 0;	// heuristic: weighted sum of ladder discs
 				
 		String[][] board 	 = b.getState();			
 		
@@ -38,17 +41,19 @@ public class GameHeuristics
 				if ( (board[i][jFrom]).equalsIgnoreCase(playerToken) )
 				{
 					// add player disc potential ladders
-					heuristicScore += detectPossibleLadders( playerToken, board, new Point(jFrom, i) );
+					numPossLadders += detectPossibleLadders( playerToken, board, new Point(jFrom, i) );
+					ladderDiscs	   += numberOfLadderDiscs( playerToken, board, new Point(jFrom, i) );
 				}
 				else if ( (board[i][jFrom]).equalsIgnoreCase(opponentToken) )
 				{
 					// subtract opponent's disc potential ladders
-					heuristicScore -= detectPossibleLadders( opponentToken, board, new Point(jFrom, i) );
+					numPossLadders -= detectPossibleLadders( opponentToken, board, new Point(jFrom, i) );
+					ladderDiscs    -= numberOfLadderDiscs( opponentToken, board, new Point(jFrom, i) );
 				}
 			}
 		}
 		
-		return heuristicScore;
+		return (numPossLadders + ladderDiscs);
 	}
 
 	private int detectPossibleLadders(String token, String[][] board, Point boardPoint)
@@ -94,22 +99,101 @@ public class GameHeuristics
 		return possibleLadders;
 	}
 	
-	/*
+	private int numberOfLadderDiscs(String token, String[][] board, Point boardPoint)
+	{
+		int numOfLadderDiscs = 0;
+		
+		for (int row = 0; row < ladderPatterns.length; row++)						// calculate non-blocked ladders discs...
+		{		
+			Boolean currLadderBlocked = false;
+			int numOfLadDiscsDetected = 0;
+			
+			for (int col = 0; col < ladderPatterns[0].length; col++)				// ...for each possible ladder pattern	
+			{
+				int xPos = boardPoint.x + ladderPatterns[row][col].x;
+				int yPos = boardPoint.y + ladderPatterns[row][col].y;
+				
+				try
+				{
+					if ( (board[yPos][xPos].equalsIgnoreCase(token)) || 
+						(board[yPos][xPos].equalsIgnoreCase("_")) )
+					{
+						// ladder not blocked
+						if ( (board[yPos][xPos].equalsIgnoreCase(token)) )
+						{
+							// detected disc, record detection.
+							numOfLadDiscsDetected++;
+						}
+					}
+					else
+					{
+						// ladder blocked
+						currLadderBlocked 		= true;
+						numOfLadDiscsDetected 	= 0;								// do not count blocked ladders 
+						break;
+					}
+				}
+				catch (Exception e)
+				{
+					// array out of bounds position, ladder blocked
+					currLadderBlocked 		= true;
+					numOfLadDiscsDetected 	= 0;									// do not count blocked ladders
+					break;
+				}
+			}
+			
+			numOfLadderDiscs = (currLadderBlocked == false) ? 
+					numOfLadderDiscs + ladderDiscWeights[numOfLadDiscsDetected] : 
+						numOfLadderDiscs;
+		}
+		
+		return numOfLadderDiscs;
+	}
+	
 	public static void main(String[] args) 
 	{
-		Board myBoard = new Board();
+		/*
+		// Heuristics Test Case 1 
+		Board boardA = new Board();			// state a
 		
-		// heuristic 1 test case
-		myBoard.setPosition(3, 7, "*");		// player positions
-		myBoard.setPosition(4, 7, "o");		// opponent positions
+		boardA.setPosition(2, 8, "*");		// player positions
+		boardA.setPosition(3, 8, "*");
+		boardA.setPosition(3, 9, "*");
+		boardA.setPosition(4, 9, "*");
 		
-		myBoard.printBoard();
+		boardA.setPosition(3, 6, "o");		// opponent positions
+		boardA.setPosition(3, 7, "o");
+		boardA.setPosition(4, 7, "o");
+		boardA.setPosition(4, 8, "o");
 		
-		GameHeuristics h = new GameHeuristics();
-		Player p = new Player("Player 1", '*', 22, myBoard);
-		Player o = new Player("Player 1", 'o', 22, myBoard);
+		boardA.printBoard();
 		
-		System.out.printf("Heuristic 1 Total: %d\n", h.numberOfPossibleLadders(p, o, myBoard) );
+		GameHeuristics hA = new GameHeuristics();
+		Player pA 		 = new Player("Player 1", '*', 22, boardA);
+		Player oA 		 = new Player("Player 1", 'o', 22, boardA);
+		int scoreA 		 = hA.calculate(pA, oA, boardA);
+		System.out.printf("Board A Heuristics Score = %d\n", scoreA);
+		
+		Board boardB = new Board();			// state b
+				
+		boardB.setPosition(2, 8, "*");		// player positions
+		boardB.setPosition(3, 8, "*");
+		boardB.setPosition(3, 9, "*");
+		boardB.setPosition(5, 8, "*");
+		
+		boardB.setPosition(3, 6, "o");		// opponent positions
+		boardB.setPosition(3, 7, "o");
+		boardB.setPosition(4, 7, "o");
+		boardB.setPosition(4, 8, "o");
+		
+		boardB.printBoard();
+		
+		GameHeuristics hB = new GameHeuristics();
+		Player pB 		  = new Player("Player 1", '*', 22, boardB);
+		Player oB 		  = new Player("Player 1", 'o', 22, boardB);
+		int scoreB		  = hB.calculate(pB, oB, boardB);
+		
+		System.out.printf("Board B Heuristics Score = %d\n", scoreB);
+		*/
 	}
-	*/
 }
