@@ -71,6 +71,8 @@ public class GameHeuristics
 				int xPos = boardPoint.x + ladderPatterns[row][col].x;
 				int yPos = boardPoint.y + ladderPatterns[row][col].y;
 				
+				// TODO: is ladder blocked? This requires finding ladder pattern midpoint.
+				
 				try
 				{
 					if ( (board[yPos][xPos].equalsIgnoreCase(token)) || 
@@ -103,15 +105,17 @@ public class GameHeuristics
 	{
 		int numOfLadderDiscs = 0;
 		
-		for (int row = 0; row < ladderPatterns.length; row++)						// calculate non-blocked ladders discs...
+		for (int row = 0; row < ladderPatterns.length; row++)			// calculate non-blocked ladders discs...
 		{		
 			Boolean currLadderBlocked = false;
 			int numOfLadDiscsDetected = 0;
 			
-			for (int col = 0; col < ladderPatterns[0].length; col++)				// ...for each possible ladder pattern	
+			for (int col = 0; col < ladderPatterns[0].length; col++)	// ...for each possible ladder pattern	
 			{
 				int xPos = boardPoint.x + ladderPatterns[row][col].x;
 				int yPos = boardPoint.y + ladderPatterns[row][col].y;
+				
+				// TODO: is ladder blocked? This requires finding ladder pattern midpoint.
 				
 				try
 				{
@@ -129,7 +133,7 @@ public class GameHeuristics
 					{
 						// ladder blocked
 						currLadderBlocked 		= true;
-						numOfLadDiscsDetected 	= 0;								// do not count blocked ladders 
+						numOfLadDiscsDetected 	= 0;	// do not count blocked ladders 
 						break;
 					}
 				}
@@ -137,7 +141,7 @@ public class GameHeuristics
 				{
 					// array out of bounds position, ladder blocked
 					currLadderBlocked 		= true;
-					numOfLadDiscsDetected 	= 0;									// do not count blocked ladders
+					numOfLadDiscsDetected 	= 0;		// do not count blocked ladders
 					break;
 				}
 			}
@@ -148,6 +152,41 @@ public class GameHeuristics
 		}
 		
 		return numOfLadderDiscs;
+	}
+	
+	public boolean isLadderBlocked(String token, String[][] board, Point boardPoint)
+	{
+		// check left ladder blocks
+		Point p1 = new Point(boardPoint.x - 1, boardPoint.y - 1);	// lower left block
+		Point p2 = new Point(boardPoint.x + 1, boardPoint.y + 1);	// upper right block
+		
+		// if board points p1 and p2 are blocked...
+		if ( !(board[p1.y][p1.x].equalsIgnoreCase(token)) &&
+				!(board[p1.y][p1.x].equalsIgnoreCase("_")) &&
+				!(board[p2.y][p2.x].equalsIgnoreCase(token)) &&
+				!(board[p2.y][p2.x].equalsIgnoreCase("_")) )
+		{
+			// win blocked
+			System.out.println("Left Win Blocked!");
+			return true;
+		}
+		
+		// check right ladder blocks
+		Point p3 = new Point(boardPoint.x - 1, boardPoint.y + 1);	// upper left block
+		Point p4 = new Point(boardPoint.x + 1, boardPoint.y - 1);	// lower right block
+		
+		// if board points p3 and p4 are blocked...
+		if ( !(board[p3.y][p3.x].equalsIgnoreCase(token)) &&
+				!(board[p3.y][p3.x].equalsIgnoreCase("_")) &&
+				!(board[p4.y][p4.x].equalsIgnoreCase(token)) &&
+				!(board[p4.y][p4.x].equalsIgnoreCase("_")) )
+		{
+			// win blocked
+			System.out.println("Right Win Blocked!");
+			return true;
+		}
+		
+		return false;
 	}
 	
 	public static void main(String[] args) 
