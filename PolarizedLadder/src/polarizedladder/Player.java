@@ -20,6 +20,7 @@ public class Player {
 	protected char playerToken;
 	
 	Board board;
+	
 	public Player(){
 		
 	}

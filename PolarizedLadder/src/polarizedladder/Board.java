@@ -142,6 +142,12 @@ public class Board {
 		this.board = board;
 	}
 	
+	public void setObjectPosition(Position p){
+		// int i = p.getI();
+		 //int j = p.getJ();
+		 //String mark = p.getMark();
+		 setPosition(p.getI(),p.getJ(), p.getMark());
+	}
 /*	public static void main(String[] args) {
 		
 		Board myBoard = new Board();

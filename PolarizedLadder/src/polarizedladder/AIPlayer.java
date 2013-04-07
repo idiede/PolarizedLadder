@@ -1,62 +1,98 @@
 package polarizedladder;
 import java.awt.Point;
-import java.util.Scanner;
+import java.util.Iterator;
+import java.util.List;
+
+
+import java.awt.Point;
+import tree.Tree;
+import tree.Node;
+
+
+
 public class AIPlayer extends Player{
 
-	
-public AIPlayer(){
-	super();
-	
-}
-public AIPlayer(String playerName, char playerToken, int discs, Board board) {
-	
-	  
-	  super.playerName=playerName;
-	  super.discs = discs;
-	  this.board = board;
-	  System.out.println("AIPlayer " + playerName);
+
+	private char AIPlayerToken;
+	private String AIPlayerString;
+
+	public AIPlayer(){
+		super();
+
 	}
+	public AIPlayer(String playerName, char playerToken, int discs, Board board) {
 
-private boolean move(){
-	
-	//take a move
-	//add a comment
-	
-	return false;
-	
-}
 
-public Point doAIPlayerTurn(Player ai){
-    
-	System.out.println("AIPlayer " + playerName);
-	System.out.printf("Please enter your next move %s (ex. 1A):", ai.getPlayerName());
-	
-	// command line input scanner
-	Scanner input = new Scanner(System.in);	
-	
-	try
-	{
-		String playerMove 	= input.nextLine();
+		super.playerName=playerName;
+		super.discs = discs;
+		this.board = board;
+		System.out.println("AIPlayer " + playerName);
+		AIPlayerToken = super.playerToken;
+		AIPlayerString = String.valueOf(AIPlayerToken);
 		
-		// parse player move
-		String rowTemp 	= playerMove.substring(0,1);	
-		int row 		= Integer.parseInt(rowTemp);
-		char [] colTemp = playerMove.toUpperCase().toCharArray();
-		int col 		= Character.getNumericValue( colTemp[1] ) - 9;
+	}
 
-		Point discCoordinates = new Point(col, row);	
-		return discCoordinates;
-	}
-	catch (ArrayIndexOutOfBoundsException aiob)
-	{
-		System.out.println("Invalid move.");
-		return doPlayerTurn(ai);
-	}
-	catch(NumberFormatException nf)
-	{
-		System.out.println("Invalid move.");
-		return doPlayerTurn(ai);
-	}
+
+	public Point doAIPlayerTurn(AIPlayer ai){
+		Point discCoordinates;
 	
+		AIPlayer aip = ai;
+		try
+		{
+			discCoordinates = aip.move(this.board);
+			return discCoordinates;
+		}
+
+		catch (ArrayIndexOutOfBoundsException aiob)
+		{
+			System.out.println("Invalid move.");
+			return doPlayerTurn(ai);
+		}
+		catch(NumberFormatException nf)
+		{
+			System.out.println("Invalid move.");
+			return doPlayerTurn(ai);
+		}
+
+	}
+
+	private Point move(Board board){
+		
+		    Point po = new Point(2,1);
+		    Position p = new Position(po,AIPlayerString);
+		    Board cb;
+		    //create new tree with board
+            Tree<Board> searchTree = new Tree<Board>(board);
+            Node<Board> n = new Node<Board>();
+            //List<Node<Board>> child;
+           
+            n.setData(board);
+            searchTree.setRoot(n);
+            Board b = (Board)searchTree.getRoot().getData();
+            System.out.println("From tree root");
+            b.printBoard();
+            
+            
+        /*  ///////////////////////////////////////////////////
+         * 
+         * I really don't understand Java trees 
+         * WHERE ARE THE POINTERS????
+         * 
+         *////////////////////////////////////////////////////
+            
+           /*Node<Board> child = new Node<Board>();
+            child.setParent(n);
+            b.setObjectPosition(p);
+            child.setData(b);
+            Node<Board> outChild = new Node<Board>();
+            outChild = n.getChildren().remove(0);//remove(child);
+            cb =outChild.getData();
+            System.out.println("From child");
+            cb.printBoard();
+            */
+          
+       
+	
+        return po;
 }
 }

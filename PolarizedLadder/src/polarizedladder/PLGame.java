@@ -158,7 +158,7 @@ public class PLGame {
 		Point playerMove = players[playerTurn].doPlayerTurn(players[playerTurn]);
 
 		if ( players[playerTurn].setDisc(playerMove.y, playerMove.x) == false){
-			(players[playerTurn]).doPlayerTurn(players[1]);
+			(players[playerTurn]).doPlayerTurn(players[playerTurn]);
 		}
 
 		if ( detectWin.detectLadder(players[playerTurn].getPlayerToken(), 
@@ -176,11 +176,11 @@ public class PLGame {
 
 	private void nextAIPlayerMove(Player[] players, WinPatternStrategy detectWin, Board board, int playerTurn){
 
-		Point AIPlayerMove = ((AIPlayer) players[playerTurn]).doAIPlayerTurn(players[playerTurn]);
+		Point AIPlayerMove = ((AIPlayer) players[playerTurn]).doAIPlayerTurn((AIPlayer)players[playerTurn]);
 
 		if ( players[playerTurn].setDisc(AIPlayerMove.y, AIPlayerMove.x) == false) 
 		{
-			((AIPlayer) players[playerTurn]).doAIPlayerTurn(players[1]);
+			((AIPlayer) players[playerTurn]).doAIPlayerTurn((AIPlayer) players[playerTurn]);
 		}
 
 		if ( detectWin.detectLadder(players[playerTurn].getPlayerToken(), 
