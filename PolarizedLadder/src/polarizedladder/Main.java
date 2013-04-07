@@ -13,10 +13,11 @@ public static void main(String[] args) {
 		
 		PLGame game = new PLGame();
         Board board = new Board();
+       
 		WinPatternStrategy detectWin= new WinPatternStrategy(board);
 		int gameType = game.displayMainMenu();
 	    Player[] players = game.setGameType(gameType, board,detectWin);
-		game.startGame(game,board, players, detectWin, gameType);
+		game.startGame(game, board, players, detectWin, gameType);
 		
 		}
 }

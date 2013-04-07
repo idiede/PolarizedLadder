@@ -6,10 +6,11 @@
 package polarizedladder;
 
 import java.awt.Point;
+import java.util.Arrays;
 
 //import java.awt.Point;
 
-public class Board extends GameHeuristics {
+public class Board {
 
 	final int BOARD_ROWS = 8;
 	final int BOARD_COLS  = 14;
@@ -20,11 +21,11 @@ public class Board extends GameHeuristics {
 	
 	public Board() {
 		
-		super();
+		//super();
 	    //check
 		Point p = new Point(1,1);
-		if(!openPoints.isEmpty()) 
-	    	System.out.println("openPoints not empty " + it.next());
+		//if(!openPoints.isEmpty()) 
+	    //	System.out.println("openPoints not empty " + it.next());
 		
 		board = new String[BOARD_ROWS][BOARD_COLS];
 		
@@ -141,8 +142,8 @@ public class Board extends GameHeuristics {
 	}
 	
 	public String[][] getState()
-	{
-		return board;
+	{	
+		return board.clone();
 	}
 	
 	public void setState(String[][] board)
@@ -150,10 +151,17 @@ public class Board extends GameHeuristics {
 		this.board = board;
 	}
 	
+	public String[][] cloneArray() {
+	    int length = board.length;
+	    String[][] target = new String[length][board[0].length];
+	    for (int i = 0; i < length; i++) {
+	        System.arraycopy(board[i], 0, target[i], 0, board[i].length);
+	    }
+	    return target;
+	}
+	
 	public void setObjectPosition(Position p){
-		// int i = p.getI();
-		 //int j = p.getJ();
-		 //String mark = p.getMark();
+		
 		 setPosition(p.getI(),p.getJ(), p.getMark());
 	}
 /*	public static void main(String[] args) {

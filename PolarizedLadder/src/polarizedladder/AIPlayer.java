@@ -33,13 +33,13 @@ public class AIPlayer extends Player{
 	}
 
 
-	public Point doAIPlayerTurn(AIPlayer ai){
+	public Point doAIPlayerTurn(AIPlayer ai, SearchLists searchList){
 		Point discCoordinates;
 	
 		AIPlayer aip = ai;
 		try
 		{
-			discCoordinates = aip.move(this.board);
+			discCoordinates = aip.move(this.board, searchList);
 			return discCoordinates;
 		}
 
@@ -56,9 +56,9 @@ public class AIPlayer extends Player{
 
 	}
 
-	private Point move(Board board){
+	private Point move(Board board, SearchLists searchList){
 		
-		    Point po = new Point(1,2);
+		    Point po = new Point(2,1);
 		    Position p = new Position(po,AIPlayerString);
 		    Board cb;
 		    //create new tree with board
@@ -66,8 +66,10 @@ public class AIPlayer extends Player{
             Node<Board> n = new Node<Board>();
             //List<Node<Board>> child;
            
-            n.setData(board);
             searchTree.setRoot(n);
+            n.setData(board);
+            
+            /*
             Board b = (Board)searchTree.getRoot().getData();
             System.out.println("From tree root");
             b.printBoard();
@@ -82,10 +84,45 @@ public class AIPlayer extends Player{
             cb =outChild.getData();
             System.out.println("From child");
             cb.printBoard();
-          
-          
-           //added a comment   
+            */
+            
+            // generate all potential next moves
+          //  int i = 0;
+            Iterator<Point> openPoints = searchList.it;
+            while (openPoints.hasNext())	
+            {	
+            	Point nextPoint 				= openPoints.next();
+
+
+		        	Position nextPosition 		= new Position(nextPoint, AIPlayerString);			// TODO: depends on who is min/max (AIPlayerString)
+		        	
+		        	//i++;
+		        	//System.out.println("#" + i + " Point:" + nextPoint);
+		        	
+		        	Board newBoard				= new Board();
+		        	String[][] oldBoard			= board.cloneArray();
+		        	newBoard.setState(oldBoard);
+		        	
+		        	//System.out.println("X: " + nextPosition.i + " Y: " + nextPosition.j);
+		        	
+		        	newBoard.setObjectPosition(nextPosition);
+		        	
+		        	newBoard.printBoard();
+		        	
+		        	Node<Board> nextChild = new Node<Board>();
+		        	nextChild.setData(newBoard);
+		        	n.addChild(nextChild);
+            	
+            }
 	
+            /*
+            Iterator<Node<Board>> it2 = n.getChildren().iterator();
+            while( it2.hasNext() )
+            {
+            	it2.next().getData().printBoard();
+            }
+            */
+            
         return po;
-}
+	}
 }

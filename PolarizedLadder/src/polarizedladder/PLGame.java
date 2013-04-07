@@ -8,14 +8,15 @@ package polarizedladder;
 import java.awt.Point;
 import java.util.Scanner;
 
-public class PLGame {
+public class PLGame{
 
 	private boolean gameOver;
 	private int playerTurn;
-
+	 SearchLists searchList;
 
 	public PLGame(){
-
+		
+		searchList = new SearchLists();
 	}
 
 	public void startGame(PLGame game, Board board, Player [] players, WinPatternStrategy detectWin, int gameType){
@@ -177,11 +178,11 @@ public class PLGame {
 
 	private void nextAIPlayerMove(Player[] players, WinPatternStrategy detectWin, Board board, int playerTurn){
 
-		Point AIPlayerMove = ((AIPlayer) players[playerTurn]).doAIPlayerTurn((AIPlayer)players[playerTurn]);
+		Point AIPlayerMove = ((AIPlayer) players[playerTurn]).doAIPlayerTurn((AIPlayer)players[playerTurn], searchList);
 
 		if ( players[playerTurn].setDisc(AIPlayerMove.y, AIPlayerMove.x) == false) 
 		{
-			((AIPlayer) players[playerTurn]).doAIPlayerTurn((AIPlayer) players[playerTurn]);
+			((AIPlayer) players[playerTurn]).doAIPlayerTurn((AIPlayer) players[playerTurn], searchList);
 		}
 
 		if ( detectWin.detectLadder(players[playerTurn].getPlayerToken(), 
