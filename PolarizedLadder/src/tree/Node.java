@@ -1,13 +1,18 @@
 package tree;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class Node<T> {
 	
     private T data;
     private Node<T> parent;
-    private List<Node<T>> children;
-	
+	private ArrayList<Node<T>> children;
+    
+    public Node()
+    {
+    	children = new ArrayList<Node<T>>();
+    }
+    
     public Node<T> getParent() {
 		return parent;
 	}
@@ -20,10 +25,10 @@ public class Node<T> {
 	public void setData(T data) {
 		this.data = data;
 	}
-	public List<Node<T>> getChildren() {
+	public ArrayList<Node<T>> getChildren() {
 		return children;
 	}
-	public void setChildren(List<Node<T>> children) {
+	public void setChildren(ArrayList<Node<T>> children) {
 		this.children = children;
 	}
 	

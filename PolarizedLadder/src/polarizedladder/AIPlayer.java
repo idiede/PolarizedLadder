@@ -27,7 +27,7 @@ public class AIPlayer extends Player{
 		super.discs = discs;
 		this.board = board;
 		System.out.println("AIPlayer " + playerName);
-		AIPlayerToken = super.playerToken;
+		AIPlayerToken = playerToken;
 		AIPlayerString = String.valueOf(AIPlayerToken);
 		
 	}
@@ -72,24 +72,17 @@ public class AIPlayer extends Player{
             System.out.println("From tree root");
             b.printBoard();
             
-            
-        /*  ///////////////////////////////////////////////////
-         * 
-         * I really don't understand Java trees 
-         * WHERE ARE THE POINTERS????
-         * 
-         *////////////////////////////////////////////////////
-            
-           /*Node<Board> child = new Node<Board>();
+            Node<Board> child = new Node<Board>();
             child.setParent(n);
             b.setObjectPosition(p);
             child.setData(b);
+            n.addChild(child);
             Node<Board> outChild = new Node<Board>();
             outChild = n.getChildren().remove(0);//remove(child);
             cb =outChild.getData();
             System.out.println("From child");
             cb.printBoard();
-            */
+          
           
        
 	
