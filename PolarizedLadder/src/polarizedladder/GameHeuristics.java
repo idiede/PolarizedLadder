@@ -18,7 +18,15 @@ public class GameHeuristics
 			{new Point (2,-2),  new Point (1,-2), new Point (1,-1), new Point(0,-1), new Point(0,0)},
 		};
 	
-	private int[] ladderDiscWeights = {0, 1, 11, 111, 1111, 11111};		// weights for 0, 1, 2, 3, 4, or 5 ladder discs
+	private int[] ladderDiscWeights  = {0, 1, 11, 111, 1111, 11111};		// weights for 0, 1, 2, 3, 4, or 5 ladder discs
+	
+	/* TODO: validate - there is no polarity block on sides
+	private Point leftSidePolarity[] = { new Point(1,1), new Point(2,2), new Point(3,3), 
+			new Point(4,4), new Point(5,5), new Point(6,6), new Point(7,7)};
+	
+	private Point rightSidePolarity[] = { new Point(13,1), new Point(12,2), new Point(11,3), 
+			new Point(10,4), new Point(9,5), new Point(8,6), new Point(7,7)};
+	*/
 	
 	public int calculate(Player p, Player o, Board b)
 	{		
@@ -41,14 +49,20 @@ public class GameHeuristics
 				if ( (board[i][jFrom]).equalsIgnoreCase(playerToken) )
 				{
 					// add player disc potential ladders
-					numPossLadders += detectPossibleLadders( playerToken, board, new Point(jFrom, i) );
-					ladderDiscs	   += numberOfLadderDiscs( playerToken, board, new Point(jFrom, i) );
+					numPossLadders += detectPossibleLadders( playerToken, opponentToken, board, new Point(jFrom, i) );
+					ladderDiscs	   += numberOfLadderDiscs( playerToken, opponentToken, board, new Point(jFrom, i) );
+					
+					System.out.printf("P1 Ladders = %d\n", numPossLadders);
+					System.out.printf("P1 Ladder Discs = %d\n", ladderDiscs);
 				}
 				else if ( (board[i][jFrom]).equalsIgnoreCase(opponentToken) )
 				{
 					// subtract opponent's disc potential ladders
-					numPossLadders -= detectPossibleLadders( opponentToken, board, new Point(jFrom, i) );
-					ladderDiscs    -= numberOfLadderDiscs( opponentToken, board, new Point(jFrom, i) );
+					numPossLadders -= detectPossibleLadders( opponentToken, playerToken, board, new Point(jFrom, i) );
+					ladderDiscs    -= numberOfLadderDiscs( opponentToken, playerToken, board, new Point(jFrom, i) );
+					
+					System.out.printf("P2 Ladders = %d\n", numPossLadders);
+					System.out.printf("P2 Ladder Discs = %d\n", ladderDiscs);
 				}
 			}
 		}
@@ -56,7 +70,7 @@ public class GameHeuristics
 		return (numPossLadders + ladderDiscs);
 	}
 
-	private int detectPossibleLadders(String token, String[][] board, Point boardPoint)
+	private int detectPossibleLadders(String playerToken, String opponentToken, String[][] board, Point boardPoint)
 	{
 		int possibleLadders	= 0;
 		
@@ -71,11 +85,21 @@ public class GameHeuristics
 				int xPos = boardPoint.x + ladderPatterns[row][col].x;
 				int yPos = boardPoint.y + ladderPatterns[row][col].y;
 				
-				// TODO: is ladder blocked? This requires finding ladder pattern midpoint.
-				
 				try
 				{
-					if ( (board[yPos][xPos].equalsIgnoreCase(token)) || 
+					if ( col == 2 ) 
+					{
+						// use ladder pattern midpoint to determine ladder blocked
+						currLadderBlocked = isLadderPolarityBlocked( playerToken, opponentToken, board, new Point(xPos, yPos) );
+						
+						if (currLadderBlocked)
+						{
+							System.out.printf("Current Ladder Blocked: row = %d, col=%d\n", row, col);
+							break;
+						}
+					}
+					
+					if ( (board[yPos][xPos].equalsIgnoreCase(playerToken)) || 
 						(board[yPos][xPos].equalsIgnoreCase("_")) )
 					{
 						// ladder not blocked
@@ -101,7 +125,7 @@ public class GameHeuristics
 		return possibleLadders;
 	}
 	
-	private int numberOfLadderDiscs(String token, String[][] board, Point boardPoint)
+	private int numberOfLadderDiscs(String playerToken, String opponentToken, String[][] board, Point boardPoint)
 	{
 		int numOfLadderDiscs = 0;
 		
@@ -115,15 +139,26 @@ public class GameHeuristics
 				int xPos = boardPoint.x + ladderPatterns[row][col].x;
 				int yPos = boardPoint.y + ladderPatterns[row][col].y;
 				
-				// TODO: is ladder blocked? This requires finding ladder pattern midpoint.
-				
 				try
 				{
-					if ( (board[yPos][xPos].equalsIgnoreCase(token)) || 
+					if ( col == 2 ) 
+					{
+						// use ladder pattern midpoint to determine ladder blocked
+						currLadderBlocked = isLadderPolarityBlocked( playerToken, opponentToken, board, new Point(xPos, yPos) );
+						
+						if (currLadderBlocked)
+						{
+							numOfLadDiscsDetected 	= 0;	// do not count blocked ladders
+							System.out.printf("Current Ladder Blocked: row = %d, col=%d\n", row, col);
+							break;
+						}
+					}
+					
+					if ( (board[yPos][xPos].equalsIgnoreCase(playerToken)) || 
 						(board[yPos][xPos].equalsIgnoreCase("_")) )
 					{
 						// ladder not blocked
-						if ( (board[yPos][xPos].equalsIgnoreCase(token)) )
+						if ( (board[yPos][xPos].equalsIgnoreCase(playerToken)) )
 						{
 							// detected disc, record detection.
 							numOfLadDiscsDetected++;
@@ -154,20 +189,27 @@ public class GameHeuristics
 		return numOfLadderDiscs;
 	}
 	
-	public boolean isLadderBlocked(String token, String[][] board, Point boardPoint)
+	public boolean isLadderPolarityBlocked(String playerToken, String opponentToken, String[][] board, Point boardPoint)
 	{
 		// check left ladder blocks
 		Point p1 = new Point(boardPoint.x - 1, boardPoint.y - 1);	// lower left block
 		Point p2 = new Point(boardPoint.x + 1, boardPoint.y + 1);	// upper right block
 		
 		// if board points p1 and p2 are blocked...
-		if ( !(board[p1.y][p1.x].equalsIgnoreCase(token)) &&
-				!(board[p1.y][p1.x].equalsIgnoreCase("_")) &&
-				!(board[p2.y][p2.x].equalsIgnoreCase(token)) &&
-				!(board[p2.y][p2.x].equalsIgnoreCase("_")) )
-		{
-			// win blocked
-			System.out.println("Left Win Blocked!");
+		if ( (board[p1.y][p1.x].equalsIgnoreCase(opponentToken)) &&
+				(board[p2.y][p2.x].equalsIgnoreCase(opponentToken)) )
+		{			
+			// ladder polarized?
+			boolean isPolarizable = isPolarizable(playerToken, opponentToken, board, boardPoint);
+			
+			if (isPolarizable)
+			{
+				return false;
+			}
+			
+			// ladder blocked
+			System.out.println("Left Ladder Blocked!");
+			
 			return true;
 		}
 		
@@ -176,16 +218,74 @@ public class GameHeuristics
 		Point p4 = new Point(boardPoint.x + 1, boardPoint.y - 1);	// lower right block
 		
 		// if board points p3 and p4 are blocked...
-		if ( !(board[p3.y][p3.x].equalsIgnoreCase(token)) &&
-				!(board[p3.y][p3.x].equalsIgnoreCase("_")) &&
-				!(board[p4.y][p4.x].equalsIgnoreCase(token)) &&
-				!(board[p4.y][p4.x].equalsIgnoreCase("_")) )
-		{
-			// win blocked
-			System.out.println("Right Win Blocked!");
+		if ( (board[p3.y][p3.x].equalsIgnoreCase(opponentToken)) &&
+				(board[p4.y][p4.x].equalsIgnoreCase(opponentToken)) )
+		{			
+			// ladder polarizable
+			boolean isPolarizable = isPolarizable(playerToken, opponentToken, board, boardPoint);
+			
+			if (isPolarizable)
+			{
+				return false;
+			}
+			
+			// ladder blocked
+			System.out.println("Right Ladder Blocked!");
+			
 			return true;
 		}
 		
+		return false;
+	}
+	
+	public boolean isPolarizable(String playerToken, String opponentToken, String[][] board, Point boardPoint)
+	{
+		// check polarity using pattern mid point
+		if ( !(board[boardPoint.y - 1][boardPoint.x].equalsIgnoreCase(opponentToken)) &&				// right ladder base polarity 
+				!(board[boardPoint.y - 1][boardPoint.x - 1].equalsIgnoreCase(opponentToken)) &&
+				(boardPoint.y - 1 == 1) )  
+		{
+			System.out.println("Base of Right Ladder Polarized!");
+			return true;
+		}
+		
+		if ( !(board[boardPoint.y - 1][boardPoint.x].equalsIgnoreCase(opponentToken)) &&				// left ladder base polarity 
+				!(board[boardPoint.y - 1][boardPoint.x + 1].equalsIgnoreCase(opponentToken)) &&
+				(boardPoint.y - 1 == 1) ) 
+				  
+		{
+			System.out.println("Base of Left Ladder Polarized!");
+			return true;
+		}
+		
+		/* TODO: validate: there is no possible polarity block on the sides
+		for (int i = 1; i < leftSidePolarity.length - 1; i++)											 // left side polarity
+		{
+			if ( boardPoint.equals(leftSidePolarity[i]) )	
+			{
+				if ( !(board[boardPoint.y - 1][boardPoint.x - 1].equalsIgnoreCase(opponentToken)) && 
+						!(board[boardPoint.y + 1][boardPoint.x + 1].equalsIgnoreCase(opponentToken)) )
+				{
+					System.out.println("Right Ladder Polarized!");	
+					return true;
+				}
+			}
+		}
+
+		for (int i = 1; i < rightSidePolarity.length - 1; i++)											 // right side polarity
+		{	
+			if ( boardPoint.equals(rightSidePolarity[i]) )	
+			{
+				if ( !(board[boardPoint.y + 1][boardPoint.x - 1].equalsIgnoreCase(opponentToken)) && 
+						!(board[boardPoint.y - 1][boardPoint.x + 1].equalsIgnoreCase(opponentToken)) )
+				{
+					System.out.println("Left Ladder Polarized!");					
+					return true;
+				}
+			}
+		}
+		*/
+				
 		return false;
 	}
 	
@@ -229,10 +329,29 @@ public class GameHeuristics
 		
 		GameHeuristics hB = new GameHeuristics();
 		Player pB 		  = new Player("Player 1", '*', 22, boardB);
-		Player oB 		  = new Player("Player 1", 'o', 22, boardB);
+		Player oB 		  = new Player("Player 2", 'o', 22, boardB);
 		int scoreB		  = hB.calculate(pB, oB, boardB);
 		
 		System.out.printf("Board B Heuristics Score = %d\n", scoreB);
+		*/
+		
+		/*
+		// Heuristics Test Case 2 
+		Board boardA = new Board();			// state a
+		
+		boardA.setPosition(3, 8, "*");		// player positions
+				
+		boardA.setPosition(4, 7, "o");		// opponent positions
+		boardA.setPosition(2, 9, "o");
+		boardA.setPosition(1, 10, "o");
+		
+		boardA.printBoard();
+		
+		GameHeuristics hA = new GameHeuristics();
+		Player pA 		  = new Player("Player 1", '*', 22, boardA);
+		Player oA 		  = new Player("Player 2", 'o', 22, boardA);
+		int scoreA 		  = hA.calculate(pA, oA, boardA);
+		System.out.printf("Board A Heuristics Score = %d\n", scoreA);
 		*/
 	}
 }
