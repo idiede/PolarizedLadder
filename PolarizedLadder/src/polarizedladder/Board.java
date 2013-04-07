@@ -91,12 +91,12 @@ public class Board extends GameHeuristics {
 	
 		try
 		{
-			if ( board[i][j].equalsIgnoreCase(" ") ) {
+			if ( board[j][i].equalsIgnoreCase(" ") ) {
 				
 				// illegal position
 				return false;
 				
-			} else if ( !board[i][j].equalsIgnoreCase("_") ) {
+			} else if ( !board[j][i].equalsIgnoreCase("_") ) {
 				
 				// illegal position
 				return false;
@@ -117,7 +117,7 @@ public class Board extends GameHeuristics {
 		
 		if (isLegalPosition (i, j)) {
 			
-			board[i][j] = mark;
+			board[j][i] = mark;
 			boardEmptySpaces--;
 			
 			return true;

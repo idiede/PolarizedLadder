@@ -35,7 +35,7 @@ public class Player {
 	
 	public boolean setDisc(int i, int j) {
 		
-		return board.setPosition(i, j, String.valueOf(playerToken));
+		return board.setPosition(j, i, String.valueOf(playerToken));
 		}
 	
 public Point doPlayerTurn(Player player) {

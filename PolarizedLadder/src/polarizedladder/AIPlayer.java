@@ -58,7 +58,7 @@ public class AIPlayer extends Player{
 
 	private Point move(Board board){
 		
-		    Point po = new Point(2,1);
+		    Point po = new Point(1,2);
 		    Position p = new Position(po,AIPlayerString);
 		    Board cb;
 		    //create new tree with board
