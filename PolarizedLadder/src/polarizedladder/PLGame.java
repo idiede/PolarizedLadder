@@ -10,8 +10,8 @@ import java.util.Scanner;
 
 public class PLGame {
 
-	private boolean gameOver;// 	= false;	
-	private int playerTurn;//s 		= 0;
+	private boolean gameOver;
+	private int playerTurn;
 
 
 	public PLGame(){

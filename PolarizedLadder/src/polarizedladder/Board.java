@@ -5,18 +5,26 @@
  */
 package polarizedladder;
 
+import java.awt.Point;
+
 //import java.awt.Point;
 
-public class Board {
+public class Board extends GameHeuristics {
 
 	final int BOARD_ROWS = 8;
 	final int BOARD_COLS  = 14;
-	 
+	//openList
 	String[][] board;
 	
 	int boardEmptySpaces;
 	
 	public Board() {
+		
+		super();
+	    //check
+		Point p = new Point(1,1);
+		if(!openPoints.isEmpty()) 
+	    	System.out.println("openPoints not empty " + it.next());
 		
 		board = new String[BOARD_ROWS][BOARD_COLS];
 		

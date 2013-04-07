@@ -4,251 +4,251 @@ import java.awt.Point;
 
 public class LadderPatternStrategy extends GameHeuristics
 {	
-	      private Point ladderPatterns[][] = winPatterns;
-	
-    ////////////////////////////////////////////////////////////////////////////////////////////////////
-	      
-	  	private int[] ladderDiscWeights  = {0, 1, 11, 111, 1111, 11111};		// weights for 0, 1, 2, 3, 4, or 5 ladder discs
-		
-		/* TODO: validate - there is no polarity block on sides
+	private Point ladderPatterns[][] = winPatterns;
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	private int[] ladderDiscWeights  = {0, 1, 11, 111, 1111, 11111};		// weights for 0, 1, 2, 3, 4, or 5 ladder discs
+
+	/* TODO: validate - there is no polarity block on sides
 		private Point leftSidePolarity[] = { new Point(1,1), new Point(2,2), new Point(3,3), 
 				new Point(4,4), new Point(5,5), new Point(6,6), new Point(7,7)};
-		
+
 		private Point rightSidePolarity[] = { new Point(13,1), new Point(12,2), new Point(11,3), 
 				new Point(10,4), new Point(9,5), new Point(8,6), new Point(7,7)};
-		*/
-		
-		public int calculate(Player p, Player o, Board b)
-		{		
-			int numPossLadders	 = 0;	// heuristic: player possible ladders - opponent possible ladders
-			int ladderDiscs		 = 0;	// heuristic: weighted sum of ladder discs
-					
-			String[][] board 	 = b.getState();			
-			
-			String playerToken   = p.getPlayerToken();	
-			String opponentToken = o.getPlayerToken();
+	 */
 
-			// analyze every populated board point for potential ladders
-			for (int i = b.BOARD_ROWS - 1; i >= 1 ; i--) 		 
-			{	
-				int jFrom   = i;
-				int jTo 	= b.BOARD_COLS - i;
-				
-				for ( ; jFrom <= jTo; jFrom++) 					
+	public int calculate(Player p, Player o, Board b)
+	{		
+		int numPossLadders	 = 0;	// heuristic: player possible ladders - opponent possible ladders
+		int ladderDiscs		 = 0;	// heuristic: weighted sum of ladder discs
+
+		String[][] board 	 = b.getState();			
+
+		String playerToken   = p.getPlayerToken();	
+		String opponentToken = o.getPlayerToken();
+
+		// analyze every populated board point for potential ladders
+		for (int i = b.BOARD_ROWS - 1; i >= 1 ; i--) 		 
+		{	
+			int jFrom   = i;
+			int jTo 	= b.BOARD_COLS - i;
+
+			for ( ; jFrom <= jTo; jFrom++) 					
+			{
+				if ( (board[i][jFrom]).equalsIgnoreCase(playerToken) )
 				{
-					if ( (board[i][jFrom]).equalsIgnoreCase(playerToken) )
-					{
-						// add player disc potential ladders
-						numPossLadders += detectPossibleLadders( playerToken, opponentToken, board, new Point(jFrom, i) );
-						ladderDiscs	   += numberOfLadderDiscs( playerToken, opponentToken, board, new Point(jFrom, i) );
-						
-						System.out.printf("P1 Ladders = %d\n", numPossLadders);
-						System.out.printf("P1 Ladder Discs = %d\n", ladderDiscs);
-					}
-					else if ( (board[i][jFrom]).equalsIgnoreCase(opponentToken) )
-					{
-						// subtract opponent's disc potential ladders
-						numPossLadders -= detectPossibleLadders( opponentToken, playerToken, board, new Point(jFrom, i) );
-						ladderDiscs    -= numberOfLadderDiscs( opponentToken, playerToken, board, new Point(jFrom, i) );
-						
-						System.out.printf("P2 Ladders = %d\n", numPossLadders);
-						System.out.printf("P2 Ladder Discs = %d\n", ladderDiscs);
-					}
+					// add player disc potential ladders
+					numPossLadders += detectPossibleLadders( playerToken, opponentToken, board, new Point(jFrom, i) );
+					ladderDiscs	   += numberOfLadderDiscs( playerToken, opponentToken, board, new Point(jFrom, i) );
+
+					System.out.printf("P1 Ladders = %d\n", numPossLadders);
+					System.out.printf("P1 Ladder Discs = %d\n", ladderDiscs);
+				}
+				else if ( (board[i][jFrom]).equalsIgnoreCase(opponentToken) )
+				{
+					// subtract opponent's disc potential ladders
+					numPossLadders -= detectPossibleLadders( opponentToken, playerToken, board, new Point(jFrom, i) );
+					ladderDiscs    -= numberOfLadderDiscs( opponentToken, playerToken, board, new Point(jFrom, i) );
+
+					System.out.printf("P2 Ladders = %d\n", numPossLadders);
+					System.out.printf("P2 Ladder Discs = %d\n", ladderDiscs);
 				}
 			}
-			
-			return (numPossLadders + ladderDiscs);
 		}
 
-		private int detectPossibleLadders(String playerToken, String opponentToken, String[][] board, Point boardPoint)
-		{
-			int possibleLadders	= 0;
-			
-			// calculate potential ladders...
-			for (int row = 0; row < ladderPatterns.length; row++)
-			{		
-				// ...for each possible ladder pattern
-				Boolean currLadderBlocked = false;
-				
-				for (int col = 0; col < ladderPatterns[0].length; col++)	
+		return (numPossLadders + ladderDiscs);
+	}
+
+	private int detectPossibleLadders(String playerToken, String opponentToken, String[][] board, Point boardPoint)
+	{
+		int possibleLadders	= 0;
+
+		// calculate potential ladders...
+		for (int row = 0; row < ladderPatterns.length; row++)
+		{		
+			// ...for each possible ladder pattern
+			Boolean currLadderBlocked = false;
+
+			for (int col = 0; col < ladderPatterns[0].length; col++)	
+			{
+				int xPos = boardPoint.x + ladderPatterns[row][col].x;
+				int yPos = boardPoint.y + ladderPatterns[row][col].y;
+
+				try
 				{
-					int xPos = boardPoint.x + ladderPatterns[row][col].x;
-					int yPos = boardPoint.y + ladderPatterns[row][col].y;
-					
-					try
+					if ( col == 2 ) 
 					{
-						if ( col == 2 ) 
+						// use ladder pattern midpoint to determine ladder blocked
+						currLadderBlocked = isLadderPolarityBlocked( playerToken, opponentToken, board, new Point(xPos, yPos) );
+
+						if (currLadderBlocked)
 						{
-							// use ladder pattern midpoint to determine ladder blocked
-							currLadderBlocked = isLadderPolarityBlocked( playerToken, opponentToken, board, new Point(xPos, yPos) );
-							
-							if (currLadderBlocked)
-							{
-								System.out.printf("Current Ladder Blocked: row = %d, col=%d\n", row, col);
-								break;
-							}
-						}
-						
-						if ( (board[yPos][xPos].equalsIgnoreCase(playerToken)) || 
-							(board[yPos][xPos].equalsIgnoreCase("_")) )
-						{
-							// ladder not blocked
-						}
-						else
-						{
-							// ladder blocked
-							currLadderBlocked = true;
+							System.out.printf("Current Ladder Blocked: row = %d, col=%d\n", row, col);
 							break;
 						}
 					}
-					catch (Exception e)
+
+					if ( (board[yPos][xPos].equalsIgnoreCase(playerToken)) || 
+							(board[yPos][xPos].equalsIgnoreCase("_")) )
 					{
-						// array out of bounds position, ladder blocked
+						// ladder not blocked
+					}
+					else
+					{
+						// ladder blocked
 						currLadderBlocked = true;
 						break;
 					}
 				}
-				
-				possibleLadders = (currLadderBlocked == true) ? possibleLadders : possibleLadders + 1;
-			}
-			
-			return possibleLadders;
-		}
-		
-		private int numberOfLadderDiscs(String playerToken, String opponentToken, String[][] board, Point boardPoint)
-		{
-			int numOfLadderDiscs = 0;
-			
-			for (int row = 0; row < ladderPatterns.length; row++)			// calculate non-blocked ladders discs...
-			{		
-				Boolean currLadderBlocked = false;
-				int numOfLadDiscsDetected = 0;
-				
-				for (int col = 0; col < ladderPatterns[0].length; col++)	// ...for each possible ladder pattern	
+				catch (Exception e)
 				{
-					int xPos = boardPoint.x + ladderPatterns[row][col].x;
-					int yPos = boardPoint.y + ladderPatterns[row][col].y;
-					
-					try
+					// array out of bounds position, ladder blocked
+					currLadderBlocked = true;
+					break;
+				}
+			}
+
+			possibleLadders = (currLadderBlocked == true) ? possibleLadders : possibleLadders + 1;
+		}
+
+		return possibleLadders;
+	}
+
+	private int numberOfLadderDiscs(String playerToken, String opponentToken, String[][] board, Point boardPoint)
+	{
+		int numOfLadderDiscs = 0;
+
+		for (int row = 0; row < ladderPatterns.length; row++)			// calculate non-blocked ladders discs...
+		{		
+			Boolean currLadderBlocked = false;
+			int numOfLadDiscsDetected = 0;
+
+			for (int col = 0; col < ladderPatterns[0].length; col++)	// ...for each possible ladder pattern	
+			{
+				int xPos = boardPoint.x + ladderPatterns[row][col].x;
+				int yPos = boardPoint.y + ladderPatterns[row][col].y;
+
+				try
+				{
+					if ( col == 2 ) 
 					{
-						if ( col == 2 ) 
+						// use ladder pattern midpoint to determine ladder blocked
+						currLadderBlocked = isLadderPolarityBlocked( playerToken, opponentToken, board, new Point(xPos, yPos) );
+
+						if (currLadderBlocked)
 						{
-							// use ladder pattern midpoint to determine ladder blocked
-							currLadderBlocked = isLadderPolarityBlocked( playerToken, opponentToken, board, new Point(xPos, yPos) );
-							
-							if (currLadderBlocked)
-							{
-								numOfLadDiscsDetected 	= 0;	// do not count blocked ladders
-								System.out.printf("Current Ladder Blocked: row = %d, col=%d\n", row, col);
-								break;
-							}
-						}
-						
-						if ( (board[yPos][xPos].equalsIgnoreCase(playerToken)) || 
-							(board[yPos][xPos].equalsIgnoreCase("_")) )
-						{
-							// ladder not blocked
-							if ( (board[yPos][xPos].equalsIgnoreCase(playerToken)) )
-							{
-								// detected disc, record detection.
-								numOfLadDiscsDetected++;
-							}
-						}
-						else
-						{
-							// ladder blocked
-							currLadderBlocked 		= true;
-							numOfLadDiscsDetected 	= 0;	// do not count blocked ladders 
+							numOfLadDiscsDetected 	= 0;	// do not count blocked ladders
+							System.out.printf("Current Ladder Blocked: row = %d, col=%d\n", row, col);
 							break;
 						}
 					}
-					catch (Exception e)
+
+					if ( (board[yPos][xPos].equalsIgnoreCase(playerToken)) || 
+							(board[yPos][xPos].equalsIgnoreCase("_")) )
 					{
-						// array out of bounds position, ladder blocked
+						// ladder not blocked
+						if ( (board[yPos][xPos].equalsIgnoreCase(playerToken)) )
+						{
+							// detected disc, record detection.
+							numOfLadDiscsDetected++;
+						}
+					}
+					else
+					{
+						// ladder blocked
 						currLadderBlocked 		= true;
-						numOfLadDiscsDetected 	= 0;		// do not count blocked ladders
+						numOfLadDiscsDetected 	= 0;	// do not count blocked ladders 
 						break;
 					}
 				}
-				
-				numOfLadderDiscs = (currLadderBlocked == false) ? 
-						numOfLadderDiscs + ladderDiscWeights[numOfLadDiscsDetected] : 
-							numOfLadderDiscs;
-			}
-			
-			return numOfLadderDiscs;
-		}
-		
-		public boolean isLadderPolarityBlocked(String playerToken, String opponentToken, String[][] board, Point boardPoint)
-		{
-			// check left ladder blocks
-			Point p1 = new Point(boardPoint.x - 1, boardPoint.y - 1);	// lower left block
-			Point p2 = new Point(boardPoint.x + 1, boardPoint.y + 1);	// upper right block
-			
-			// if board points p1 and p2 are blocked...
-			if ( (board[p1.y][p1.x].equalsIgnoreCase(opponentToken)) &&
-					(board[p2.y][p2.x].equalsIgnoreCase(opponentToken)) )
-			{			
-				// ladder polarized?
-				boolean isPolarizable = isPolarizable(playerToken, opponentToken, board, boardPoint);
-				
-				if (isPolarizable)
+				catch (Exception e)
 				{
-					return false;
+					// array out of bounds position, ladder blocked
+					currLadderBlocked 		= true;
+					numOfLadDiscsDetected 	= 0;		// do not count blocked ladders
+					break;
 				}
-				
-				// ladder blocked
-				System.out.println("Left Ladder Blocked!");
-				
-				return true;
 			}
-			
-			// check right ladder blocks
-			Point p3 = new Point(boardPoint.x - 1, boardPoint.y + 1);	// upper left block
-			Point p4 = new Point(boardPoint.x + 1, boardPoint.y - 1);	// lower right block
-			
-			// if board points p3 and p4 are blocked...
-			if ( (board[p3.y][p3.x].equalsIgnoreCase(opponentToken)) &&
-					(board[p4.y][p4.x].equalsIgnoreCase(opponentToken)) )
-			{			
-				// ladder polarizable
-				boolean isPolarizable = isPolarizable(playerToken, opponentToken, board, boardPoint);
-				
-				if (isPolarizable)
-				{
-					return false;
-				}
-				
-				// ladder blocked
-				System.out.println("Right Ladder Blocked!");
-				
-				return true;
-			}
-			
-			return false;
+
+			numOfLadderDiscs = (currLadderBlocked == false) ? 
+					numOfLadderDiscs + ladderDiscWeights[numOfLadDiscsDetected] : 
+						numOfLadderDiscs;
 		}
-		
-		public boolean isPolarizable(String playerToken, String opponentToken, String[][] board, Point boardPoint)
+
+		return numOfLadderDiscs;
+	}
+
+	public boolean isLadderPolarityBlocked(String playerToken, String opponentToken, String[][] board, Point boardPoint)
+	{
+		// check left ladder blocks
+		Point p1 = new Point(boardPoint.x - 1, boardPoint.y - 1);	// lower left block
+		Point p2 = new Point(boardPoint.x + 1, boardPoint.y + 1);	// upper right block
+
+		// if board points p1 and p2 are blocked...
+		if ( (board[p1.y][p1.x].equalsIgnoreCase(opponentToken)) &&
+				(board[p2.y][p2.x].equalsIgnoreCase(opponentToken)) )
+		{			
+			// ladder polarized?
+			boolean isPolarizable = isPolarizable(playerToken, opponentToken, board, boardPoint);
+
+			if (isPolarizable)
+			{
+				return false;
+			}
+
+			// ladder blocked
+			System.out.println("Left Ladder Blocked!");
+
+			return true;
+		}
+
+		// check right ladder blocks
+		Point p3 = new Point(boardPoint.x - 1, boardPoint.y + 1);	// upper left block
+		Point p4 = new Point(boardPoint.x + 1, boardPoint.y - 1);	// lower right block
+
+		// if board points p3 and p4 are blocked...
+		if ( (board[p3.y][p3.x].equalsIgnoreCase(opponentToken)) &&
+				(board[p4.y][p4.x].equalsIgnoreCase(opponentToken)) )
+		{			
+			// ladder polarizable
+			boolean isPolarizable = isPolarizable(playerToken, opponentToken, board, boardPoint);
+
+			if (isPolarizable)
+			{
+				return false;
+			}
+
+			// ladder blocked
+			System.out.println("Right Ladder Blocked!");
+
+			return true;
+		}
+
+		return false;
+	}
+
+	public boolean isPolarizable(String playerToken, String opponentToken, String[][] board, Point boardPoint)
+	{
+		// check polarity using pattern mid point
+		if ( !(board[boardPoint.y - 1][boardPoint.x].equalsIgnoreCase(opponentToken)) &&				// right ladder base polarity 
+				!(board[boardPoint.y - 1][boardPoint.x - 1].equalsIgnoreCase(opponentToken)) &&
+				(boardPoint.y - 1 == 1) )  
 		{
-			// check polarity using pattern mid point
-			if ( !(board[boardPoint.y - 1][boardPoint.x].equalsIgnoreCase(opponentToken)) &&				// right ladder base polarity 
-					!(board[boardPoint.y - 1][boardPoint.x - 1].equalsIgnoreCase(opponentToken)) &&
-					(boardPoint.y - 1 == 1) )  
-			{
-				System.out.println("Base of Right Ladder Polarized!");
-				return true;
-			}
-			
-			if ( !(board[boardPoint.y - 1][boardPoint.x].equalsIgnoreCase(opponentToken)) &&				// left ladder base polarity 
-					!(board[boardPoint.y - 1][boardPoint.x + 1].equalsIgnoreCase(opponentToken)) &&
-					(boardPoint.y - 1 == 1) ) 
-					  
-			{
-				System.out.println("Base of Left Ladder Polarized!");
-				return true;
-			}
-			
-			/* TODO: validate: there is no possible polarity block on the sides
+			System.out.println("Base of Right Ladder Polarized!");
+			return true;
+		}
+
+		if ( !(board[boardPoint.y - 1][boardPoint.x].equalsIgnoreCase(opponentToken)) &&				// left ladder base polarity 
+				!(board[boardPoint.y - 1][boardPoint.x + 1].equalsIgnoreCase(opponentToken)) &&
+				(boardPoint.y - 1 == 1) ) 
+
+		{
+			System.out.println("Base of Left Ladder Polarized!");
+			return true;
+		}
+
+		/* TODO: validate: there is no possible polarity block on the sides
 			for (int i = 1; i < leftSidePolarity.length - 1; i++)											 // left side polarity
 			{
 				if ( boardPoint.equals(leftSidePolarity[i]) )	
@@ -274,79 +274,78 @@ public class LadderPatternStrategy extends GameHeuristics
 					}
 				}
 			}
-			*/
-					
-			return false;
-		}
-		
-		public static void main(String[] args) 
-		{
-			/*
+		 */
+
+		return false;
+	}
+
+	public static void main(String[] args) 
+	{
+		/*
 			// Heuristics Test Case 1 
 			Board boardA = new Board();			// state a
-			
+
 			boardA.setPosition(2, 8, "*");		// player positions
 			boardA.setPosition(3, 8, "*");
 			boardA.setPosition(3, 9, "*");
 			boardA.setPosition(4, 9, "*");
-			
+
 			boardA.setPosition(3, 6, "o");		// opponent positions
 			boardA.setPosition(3, 7, "o");
 			boardA.setPosition(4, 7, "o");
 			boardA.setPosition(4, 8, "o");
-			
+
 			boardA.printBoard();
-			
+
 			GameHeuristics hA = new GameHeuristics();
 			Player pA 		 = new Player("Player 1", '*', 22, boardA);
 			Player oA 		 = new Player("Player 1", 'o', 22, boardA);
 			int scoreA 		 = hA.calculate(pA, oA, boardA);
 			System.out.printf("Board A Heuristics Score = %d\n", scoreA);
-			
+
 			Board boardB = new Board();			// state b
-					
+
 			boardB.setPosition(2, 8, "*");		// player positions
 			boardB.setPosition(3, 8, "*");
 			boardB.setPosition(3, 9, "*");
 			boardB.setPosition(5, 8, "*");
-			
+
 			boardB.setPosition(3, 6, "o");		// opponent positions
 			boardB.setPosition(3, 7, "o");
 			boardB.setPosition(4, 7, "o");
 			boardB.setPosition(4, 8, "o");
-			
+
 			boardB.printBoard();
-			
+
 			GameHeuristics hB = new GameHeuristics();
 			Player pB 		  = new Player("Player 1", '*', 22, boardB);
 			Player oB 		  = new Player("Player 2", 'o', 22, boardB);
 			int scoreB		  = hB.calculate(pB, oB, boardB);
-			
+
 			System.out.printf("Board B Heuristics Score = %d\n", scoreB);
-			*/
-			
-			/*
+		 */
+
+		/*
 			// Heuristics Test Case 2 
 			Board boardA = new Board();			// state a
-			
+
 			boardA.setPosition(3, 8, "*");		// player positions
-					
+
 			boardA.setPosition(4, 7, "o");		// opponent positions
 			boardA.setPosition(2, 9, "o");
 			boardA.setPosition(1, 10, "o");
-			
+
 			boardA.printBoard();
-			
+
 			GameHeuristics hA = new GameHeuristics();
 			Player pA 		  = new Player("Player 1", '*', 22, boardA);
 			Player oA 		  = new Player("Player 2", 'o', 22, boardA);
 			int scoreA 		  = hA.calculate(pA, oA, boardA);
 			System.out.printf("Board A Heuristics Score = %d\n", scoreA);
-			*/
-		}
+		 */
 	}
-     
-	      
-	      
-	////////////////////////////////////////////////////////////////////////////////////////////////////      
-	
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////      
