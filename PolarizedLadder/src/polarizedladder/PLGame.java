@@ -154,11 +154,12 @@ public class PLGame {
 	}
 
 	private void nextPlayerMove(Player[] players, WinPatternStrategy detectWin, Board board, int playerTurn){
+		
+		Point playerMove = new Point();
 
-		Point playerMove = players[playerTurn].doPlayerTurn(players[playerTurn]);
-
-		if ( players[playerTurn].setDisc(playerMove.y, playerMove.x) == false){
-			(players[playerTurn]).doPlayerTurn(players[playerTurn]);
+		while ( !(players[playerTurn].setDisc(playerMove.y, playerMove.x)) )
+		{
+			playerMove = players[playerTurn].doPlayerTurn(players[playerTurn]);
 		}
 
 		if ( detectWin.detectLadder(players[playerTurn].getPlayerToken(), 
