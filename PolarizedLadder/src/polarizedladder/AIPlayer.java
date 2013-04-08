@@ -65,14 +65,14 @@ public class AIPlayer extends Player{
 	private Point move(Board board, SearchLists searchList)
 	{
 		// local variables
-
-		int defaultTreeDepth = 2;
+        
+		int startTreeDepth = 1;
 
         // create new tree with board
 		Tree<Board> searchTree = createTree(board);
         
         // generate all potential next moves
-        createStateSpace(searchTree.getRoot(), searchList, defaultTreeDepth, AIPlayerString);
+        createStateSpace(searchTree.getRoot(), searchList, startTreeDepth, AIPlayerString);
         
         return new Point(1, 1);																			// TODO: invalid move should not be returned. only valid moves should be returned.
         //		  or should be ignored at client object (i.e. null)
@@ -96,9 +96,10 @@ public class AIPlayer extends Player{
 	{
 		// generate all potential next moves
         Iterator<Point> openPoints = searchList.getIterator();														// TODO: BUG? Hash table needs to be new across search spaces
+        int maxDepth;
         
         // and shared with sub-trees.
-		if (depthOfTree == 1)
+		if (depthOfTree == 2)
 		{
 			while (openPoints.hasNext())
 			{
@@ -145,7 +146,7 @@ public class AIPlayer extends Player{
         		// populate child sub-tree
         		String nextToken = (currPlayer == AIPlayerString) ? OpponentString : AIPlayerString;
         		
-        		createStateSpace(childNode, searchList, depthOfTree - 1, nextToken);
+        		createStateSpace(childNode, searchList, depthOfTree + 1, nextToken);
         	}
 		}
 	}
