@@ -11,7 +11,11 @@ public class AIPlayer extends Player{
 	private char AIPlayerToken;
 	private String AIPlayerString;
 	private String OpponentString;
+	private int maxDepth;
     
+	
+
+
 	private LadderPatternStrategy heuristics;
 	
 	private AIPlayer aip;
@@ -67,7 +71,7 @@ public class AIPlayer extends Player{
 		// local variables
         
 		int startTreeDepth = 1;
-
+        maxDepth = 2;
         // create new tree with board
 		Tree<Board> searchTree = createTree(board);
         
@@ -96,10 +100,10 @@ public class AIPlayer extends Player{
 	{
 		// generate all potential next moves
         Iterator<Point> openPoints = searchList.getIterator();														// TODO: BUG? Hash table needs to be new across search spaces
-        int maxDepth;
+       
         
         // and shared with sub-trees.
-		if (depthOfTree == 2)
+		if (depthOfTree == maxDepth)
 		{
 			while (openPoints.hasNext())
 			{
@@ -150,4 +154,13 @@ public class AIPlayer extends Player{
         	}
 		}
 	}
+
+
+public int getMaxDepth() {
+	return maxDepth;
+}
+
+public void setMaxDepth(int maxDepth) {
+	this.maxDepth = maxDepth;
+}
 }
