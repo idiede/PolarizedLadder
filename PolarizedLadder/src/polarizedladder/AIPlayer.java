@@ -65,7 +65,11 @@ public class AIPlayer extends Player{
 	private Point move(Board board, SearchLists searchList)
 	{
 		// local variables
+<<<<<<< HEAD
 		int defaultTreeDepth = 2;
+=======
+		int defaultTreeDepth = 1;
+>>>>>>> Please go away
 		
         // create new tree with board
 		Tree<Board> searchTree = createTree(board);
@@ -92,10 +96,16 @@ public class AIPlayer extends Player{
 	public void createStateSpace(Node<Board> parentNode, SearchLists searchList, int depthOfTree, String currPlayer)
 	{
 		// generate all potential next moves
+<<<<<<< HEAD
         Iterator<Point> openPoints = searchList.getIterator();														// TODO: BUG? Hash table needs to be new across search spaces
         
         // and shared with sub-trees.
 		if (depthOfTree == 1)
+=======
+        Iterator<Point> openPoints = searchList.it;														// TODO: BUG? Hash table needs to be new across search spaces
+        // and shared with sub-trees.
+		if (depthOfTree == 0)
+>>>>>>> Please go away
 		{
 			while ( openPoints.hasNext() )
 			{
@@ -113,14 +123,26 @@ public class AIPlayer extends Player{
 				Node<Board> nextChild = new Node<Board>();
 				nextChild.setData(newBoard);
 				parentNode.addChild(nextChild);
+				
 			}
 			
 			System.out.println("Created: " + parentNode.getChildren().size() + " leaf nodes." );
+<<<<<<< HEAD
 		}
 		else
 		{
 			while ( openPoints.hasNext() )
 			{
+=======
+			
+		}
+		else if (depthOfTree == 1)
+		{
+			Iterator<Point> openPoints2 = searchList.it;	
+			while (openPoints2.hasNext() )
+			{
+				
+>>>>>>> Please go away
 				// prepare new board
 				Board newBoard = new Board();
 				newBoard.setState(board.cloneArray());
