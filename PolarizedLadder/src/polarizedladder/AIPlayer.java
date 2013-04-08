@@ -90,81 +90,7 @@ public class AIPlayer extends Player{
         return searchTree;
 	}
 	
-/*	public void createStateSpace(Node<Board> parentNode, SearchLists searchList, int depthOfTree, String currPlayer)
-	{
-		// generate all potential next moves
-<<<<<<< HEAD
-        Iterator<Point> openPoints = searchList.getIterator();														// TODO: BUG? Hash table needs to be new across search spaces
-        
-        // and shared with sub-trees.
-		if (depthOfTree == 1)
-=======
-        Iterator<Point> openPoints = searchList.it;														// TODO: BUG? Hash table needs to be new across search spaces
-        // and shared with sub-trees.
-		if (depthOfTree == 0)
->>>>>>> Please go away
-		{
-			while ( openPoints.hasNext() )
-			{
-				// prepare new board
-				Board newBoard = new Board();
-				newBoard.setState(board.cloneArray());
-                
-				// generate next move
-				Point nextPoint 	  = openPoints.next();
-				Position nextPosition = new Position(nextPoint, currPlayer);							// get next move
-				newBoard.setObjectPosition(nextPosition);
-				newBoard.heuristic 	  = heuristics.calculate((Player) aip, this.p, newBoard);         	// calculate next move heuristics (at leaves only)
-				
-				// add next move child node to tree
-				Node<Board> nextChild = new Node<Board>();
-				nextChild.setData(newBoard);
-				parentNode.addChild(nextChild);
-				
-			}
-			
-			System.out.println("Created: " + parentNode.getChildren().size() + " leaf nodes." );
-<<<<<<< HEAD
-		}
-		else
-		{
-			while ( openPoints.hasNext() )
-			{
-=======
-			
-		}
-		else if (depthOfTree == 1)
-		{
-			Iterator<Point> openPoints2 = searchList.it;	
-			while (openPoints2.hasNext() )
-			{
-				
->>>>>>> Please go away
-				// prepare new board
-				Board newBoard = new Board();
-				newBoard.setState(board.cloneArray());
-                
-				// generate next move
-				Point nextPoint 	  = openPoints.next();
-				Position nextPosition = new Position(nextPoint, currPlayer);							// get next move
-				newBoard.setObjectPosition(nextPosition);
-                
-				// add next move child node to tree
-				Node<Board> nextChild = new Node<Board>();
-				nextChild.setData(newBoard);
-				parentNode.addChild(nextChild);
-			}
-			
-        	for (Node<Board> childNode : parentNode.getChildren())
-        	{
-        		// populate child sub-tree
-        		String nextToken = (currPlayer == AIPlayerString) ? OpponentString : AIPlayerString;
-        		
-        		createStateSpace(childNode, searchList, depthOfTree - 1, nextToken);
-        	}
-		}
-	}
-}*/
+
 	
 	public void createStateSpace(Node<Board> parentNode, SearchLists searchList, int depthOfTree, String currPlayer)
 	{
@@ -174,7 +100,7 @@ public class AIPlayer extends Player{
         // and shared with sub-trees.
 		if (depthOfTree == 1)
 		{
-			while ( openPoints.hasNext() )
+			while (openPoints.hasNext())
 			{
 				// prepare new board
 				Board newBoard = new Board();
@@ -185,7 +111,8 @@ public class AIPlayer extends Player{
 				Position nextPosition = new Position(nextPoint, currPlayer);							// get next move
 				newBoard.setObjectPosition(nextPosition);
 				newBoard.heuristic 	  = heuristics.calculate((Player) aip, this.p, newBoard);         	// calculate next move heuristics (at leaves only)
-
+               //?? newBoard.setHeuristic(newBoard.heuristic);
+				
 				// add next move child node to tree
 				Node<Board> nextChild = new Node<Board>();
 				nextChild.setData(newBoard);
@@ -196,7 +123,7 @@ public class AIPlayer extends Player{
 		}
 		else
 		{
-			while ( openPoints.hasNext() )
+			while (openPoints.hasNext())
 			{
 				// prepare new board
 				Board newBoard = new Board();

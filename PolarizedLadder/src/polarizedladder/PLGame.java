@@ -157,7 +157,7 @@ public class PLGame {
 		
 		Point playerMove = new Point();
 
-		while ( !(players[playerTurn].setDisc(playerMove.y, playerMove.x)) )
+		while (!(players[playerTurn].setDisc(playerMove.y, playerMove.x)) )
 		{
 			playerMove = players[playerTurn].doPlayerTurn(players[playerTurn]);
 		}
