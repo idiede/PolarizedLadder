@@ -9,7 +9,7 @@ public abstract class GameHeuristics {
 	public String open = "open";
 	public Hashtable<Point, String> openPoints;
 	public Hashtable<Point, String> closedPoints;
-	public Iterator<Point> it;
+	//public Iterator<Point> it;
 	
 	final int BOARD_ROWS = 8;
 	final int BOARD_COLS  = 14;
@@ -19,10 +19,15 @@ public abstract class GameHeuristics {
     	 openPoints = new Hashtable<Point, String>();
     	 closedPoints = new Hashtable<Point, String>();
     	 openPoints = initializeOpenPoints(openPoints);
-    	 it = openPoints.keySet().iterator();
+    	 //it = openPoints.keySet().iterator();
     	 
     }
 	
+    public Iterator<Point> getIterator()
+    {
+    	return openPoints.keySet().iterator();
+    }
+    
 	public Point winPatterns[][] = { 			
 			{new Point(0,0), new Point(1,0), new Point (1,1), new Point (2,1) , new Point (2,2)},			//  right ladder patterns
 			{new Point(-1,0), new Point(0,0), new Point (0,1), new Point (1,1) , new Point (1,2)},
