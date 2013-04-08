@@ -16,6 +16,8 @@ public abstract class GameHeuristics {
 	
     public GameHeuristics(){
     	
+    	  //make a hash table singleton class
+    	
     	 openPoints = new Hashtable<Point, String>();
     	 closedPoints = new Hashtable<Point, String>();
     	 openPoints = initializeOpenPoints(openPoints);
@@ -39,10 +41,11 @@ public abstract class GameHeuristics {
 	
 
     Hashtable<Point, String> initializeOpenPoints(Hashtable<Point, String> openPoints){
-		
-    	openPoints = new Hashtable<Point, String>();
+		openPoints = new Hashtable<Point, String>();
+	//	int center = 7;
+		//int finalPoint = 13;
 		Point p;
-		
+		int idx = 0;
 		for (int i = BOARD_ROWS - 1; i >= 1 ; i--) {
 			
 			int jFrom   = i;
@@ -52,9 +55,37 @@ public abstract class GameHeuristics {
 				
 				p = new Point(jFrom, i);
 				openPoints.put(p, open);
+				idx ++;
+				System.out.println(p + " From intialize " + idx);
 			}
 		}
-			
+		
+		/*
+		for(int i = 1; i <= center; i++){
+			for(int j = 1; j <= 7; j++){
+				p = new Point(i, j);
+				
+				System.out.println(p);
+				
+				openPoints.put(p, open);
+				if(i==j){
+
+					break;//inner loop
+				}
+			}
+		}
+
+       for(int i = center+1 ; i <= finalPoint; i++){
+			for(int j = center-1; j >= 1; j--){
+				p = new Point(i, j);
+				
+				//System.out.println(p);
+				
+				openPoints.put(p, open);
+			}
+		}
+		*/
+		
 		return openPoints;
 	}  
 
@@ -67,6 +98,7 @@ public abstract class GameHeuristics {
 
 		openPoints.put(p, open);
 	}
+	
 
 	public String getOpen() {
 		return open;

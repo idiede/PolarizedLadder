@@ -25,6 +25,7 @@ public class Board {
 	
 	public Board() {
 		
+		//super();
 	    //check
 		Point p = new Point(1,1);
 		//if(!openPoints.isEmpty()) 

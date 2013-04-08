@@ -8,13 +8,14 @@ package polarizedladder;
 import java.awt.Point;
 import java.util.Scanner;
 
-public class PLGame {
+public class PLGame{
 
 	private boolean gameOver;
 	private int playerTurn;
-	SearchLists searchList;
+	 SearchLists searchList;
 
 	public PLGame(){
+		
 		searchList = new SearchLists();
 	}
 
@@ -177,11 +178,11 @@ public class PLGame {
 
 	private void nextAIPlayerMove(Player[] players, WinPatternStrategy detectWin, Board board, int playerTurn){
 
-		Point AIPlayerMove = ((AIPlayer) players[playerTurn]).doAIPlayerTurn((AIPlayer)players[playerTurn], players[getNextPlayerTurn(playerTurn)], searchList);
+		Point AIPlayerMove = ((AIPlayer) players[playerTurn]).doAIPlayerTurn((AIPlayer)players[playerTurn], searchList);
 
 		if ( players[playerTurn].setDisc(AIPlayerMove.y, AIPlayerMove.x) == false) 
 		{
-			((AIPlayer) players[playerTurn]).doAIPlayerTurn((AIPlayer)players[playerTurn], players[getNextPlayerTurn(playerTurn)], searchList);
+			((AIPlayer) players[playerTurn]).doAIPlayerTurn((AIPlayer) players[playerTurn], searchList);
 		}
 
 		if ( detectWin.detectLadder(players[playerTurn].getPlayerToken(), 
@@ -279,16 +280,6 @@ public class PLGame {
 		else 
 			if(playerTurn == 1)
 				setPlayerTurn(0);
-	}
-	public int getNextPlayerTurn(int playerTurn){
-		int nextPlayer=0;
-		if(playerTurn == 0)
-			nextPlayer =1;
-		else 
-			if(playerTurn == 1)
-				nextPlayer =0;
-		
-		return nextPlayer;
 	}
 
 	/*	public static void main(String[] args) {
