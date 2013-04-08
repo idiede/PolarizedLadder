@@ -10,13 +10,18 @@ public class AIPlayer extends Player{
 
 	private char AIPlayerToken;
 	private String AIPlayerString;
+	private String OpponentString;
+
+	private LadderPatternStrategy heuristics;
 	
-	AIPlayer aip;
-	Player p;
+	private AIPlayer aip;
+	private Player p;
 
 	public AIPlayer(){
+		
 		super();
 
+		heuristics = new LadderPatternStrategy();
 	}
 	
 	public AIPlayer(String playerName, char playerToken, int discs, Board board) {
@@ -33,10 +38,12 @@ public class AIPlayer extends Player{
 	}
 		
 	public Point doAIPlayerTurn(AIPlayer ai, Player p, SearchLists searchList){
+		
 		Point discCoordinates;
 	
-		this.aip  = ai;
-		this.p 	  = p;
+		this.aip  			= ai;
+		this.p 	  			= p;
+		this.OpponentString = String.valueOf(p.playerToken);
 		
 		try
 		{
@@ -59,40 +66,83 @@ public class AIPlayer extends Player{
 	private Point move(Board board, SearchLists searchList)
 	{
 		// local variables
-		int defaultTreeDepth   = 3;
+		int defaultTreeDepth = 3;
 		
-	    // create new tree with board
-        Tree<Board> searchTree = new Tree<Board>(board);
-        Node<Board> n 	       = new Node<Board>();
+		 // create new tree with board
+		Tree<Board> searchTree = createTree(board);
        
-        searchTree.setRoot(n);
-        n.setData(board);
-              
         // generate all potential next moves
-        LadderPatternStrategy heuristics = new LadderPatternStrategy();
-        Iterator<Point> openPoints       = searchList.it;									// TODO: BUG. Hash table needs to be new across search spaces
-                                                                                            // and shared with sub-trees.
+        createStateSpace(searchTree.getRoot(), searchList, defaultTreeDepth, AIPlayerString);
+         
+        return new Point(1, 1);																			// TODO: invalid move should not be returned. only valid moves should be returned.
+        																								//		  or should be ignored at client object (i.e. null)
+	}
+	
+	public Tree<Board> createTree(Board board)
+	{
+		 // create new tree with board
+        Tree<Board> searchTree = new Tree<Board>(board);
+        Node<Board> root       = new Node<Board>();
+       
+        searchTree.setRoot(root);
+        root.setData(board);
         
-        while (openPoints.hasNext())	
-        {	
-        	// prepare new board
-        	Board newBoard = new Board();
-        	newBoard.setState(board.cloneArray());
+        return searchTree;
+	}
+	
+	public void createStateSpace(Node<Board> parentNode, SearchLists searchList, int depthOfTree, String currPlayer)
+	{
+		// generate all potential next moves
+        Iterator<Point> openPoints       = searchList.it;												// TODO: BUG? Hash table needs to be new across search spaces
+         int i = 0;                                                                                			// and shared with sub-trees.
+		if (depthOfTree == 0)
+			System.out.println("Terminated");  //when you run through the code you will see that this call is never reached
+	/*	{   recursively you don't need any specific depth so see line 119
+			while ( openPoints.hasNext() )
+			{
+				// prepare new board
+				Board newBoard = new Board();
+				newBoard.setState(board.cloneArray());
+				 System.out.println("i" + i++); 
+				// generate next move
+				Point nextPoint 	  = openPoints.next();       	
+				Position nextPosition = new Position(nextPoint, currPlayer);							// get next move	
+				newBoard.setObjectPosition(nextPosition);
+				newBoard.heuristic 	  = heuristics.calculate((Player) aip, this.p, newBoard);         	// calculate next move heuristics (at leaves only)
+				
+				// add next move child node to tree 
+				Node<Board> nextChild = new Node<Board>();
+				nextChild.setData(newBoard);
+				parentNode.addChild(nextChild);
+			}
+		}*/
+		else//this should be the only recursive call.. 
+		{
+			while (openPoints.hasNext())
+			{ 
+				
+				// prepare new board
+				Board newBoard = new Board();
+				newBoard.setState(board.cloneArray());
+				 System.out.println("i" + i++);
+				// generate next move
+				Point nextPoint 	  = openPoints.next();       	
+				Position nextPosition = new Position(nextPoint, currPlayer);							// get next move	
+				newBoard.setObjectPosition(nextPosition);
         	
-        	// generate next move
-        	Point nextPoint 	  = openPoints.next();       	
-        	Position nextPosition = new Position(nextPoint, AIPlayerString);	// get next move	// TODO: depends on who is min/max (AIPlayerString)
-        	newBoard.setObjectPosition(nextPosition);
-        	
-        	// calculate next move heuristics (at leaves only)
-        	System.out.println(heuristics.calculate((Player) aip, this.p, newBoard));	// TODO: determine where to store heuristic
-
-        	// add next move child node to tree 
-        	Node<Board> nextChild = new Node<Board>();
-        	nextChild.setData(newBoard);
-        	n.addChild(nextChild);
-        }
-        
-        return new Point(1, 1);	// TODO: invalid move should not be returned. only valid moves should be returned.
+				// add next move child node to tree 
+				Node<Board> nextChild = new Node<Board>();
+				nextChild.setData(newBoard);
+				parentNode.addChild(nextChild);//but there is no parent and can't be with a bottom up build
+			}//we need a top down recursive call from d = 0 to n
+			
+        	for (Node<Board> childNode : parentNode.getChildren())
+        	{
+        		// populate child sub-tree
+        		String nextToken = (currPlayer == AIPlayerString) ? AIPlayerString : OpponentString;
+        		 System.out.println("i" + i++);  
+        		createStateSpace(childNode, searchList, depthOfTree - 1, nextToken);
+        	}
+		}
 	}
 }
