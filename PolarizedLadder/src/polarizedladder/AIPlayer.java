@@ -49,9 +49,11 @@ public class AIPlayer extends Player{
 		this.p 	  			= p;
 		this.OpponentString = String.valueOf(p.playerToken);
 		
+		
 		try
 		{
 			discCoordinates = aip.move(this.board, searchList);
+			searchList.removePoint(discCoordinates, searchList);
 			return discCoordinates;
 		}
 		catch (ArrayIndexOutOfBoundsException aiob)

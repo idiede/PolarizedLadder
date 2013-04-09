@@ -2,6 +2,7 @@ package polarizedladder;
 
 import java.awt.Point;
 import java.util.Hashtable;
+import java.util.Iterator;
 
 public class SearchLists extends GameHeuristics {
 	
@@ -18,4 +19,14 @@ public class SearchLists extends GameHeuristics {
 		return copy;
 	}
 	
+	public void removePoint(Point point, SearchLists openList){
+		
+		Iterator<Point> it = openList.getIterator();
+		while(it.hasNext()){
+			if(it.next().equals(point)){
+				it.remove();
+				System.out.println(point);
+			}
+		}
+	}
 }
