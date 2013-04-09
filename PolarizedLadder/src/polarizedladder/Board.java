@@ -19,16 +19,13 @@ public class Board {
 	//added Sunday night
 	int heuristic;
 	
-	
+	Point lastBoardPosition;
 
 	int boardEmptySpaces;
 	
 	public Board() {
 		
-	    //check
-		Point p = new Point(1,1);
-		//if(!openPoints.isEmpty()) 
-	    //	System.out.println("openPoints not empty " + it.next());
+	    lastBoardPosition = new Point();
 		
 		board = new String[BOARD_ROWS][BOARD_COLS];
 		
@@ -121,6 +118,8 @@ public class Board {
 		
 		if (isLegalPosition (i, j)) {
 			
+			lastBoardPosition = new Point(i, j);
+			
 			board[j][i] = mark;
 			boardEmptySpaces--;
 			
@@ -163,9 +162,9 @@ public class Board {
 	    return target;
 	}
 	
-	public void setObjectPosition(Position p){
+	public boolean setObjectPosition(Position p){
 		
-		 setPosition(p.getI(),p.getJ(), p.getMark());
+		return setPosition(p.getI(),p.getJ(), p.getMark());
 	}
 	
 	public int getHeuristic() {
@@ -175,13 +174,26 @@ public class Board {
 	public void setHeuristic(int heuristic) {
 		this.heuristic = heuristic;
 	}
-/*	public static void main(String[] args) {
-		
+	
+	public Point getLastBoardPosition() {
+		return lastBoardPosition;
+	}
+
+	public void setLastBoardPosition(Point lastBoardPosition) {
+		this.lastBoardPosition = lastBoardPosition;
+	}
+	
+	/*
+	public static void main(String[] args) 
+	{
+	
 		Board myBoard = new Board();
-		myBoard.printBoard();
-		
 		System.out.println(myBoard.setPosition(5, 5, "x"));
 		myBoard.printBoard();
 		
-	}*/
+		Board newBoard = new Board(); 
+		newBoard.setState(myBoard.cloneArray());
+		newBoard.printBoard();
+	}
+	*/
 }
