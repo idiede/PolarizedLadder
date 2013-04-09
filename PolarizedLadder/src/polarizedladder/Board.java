@@ -58,6 +58,7 @@ public class Board {
 		}
 	}
 	
+
 	public void resetBoard() {
 		
 		boardEmptySpaces = 49;
@@ -182,6 +183,15 @@ public class Board {
 	public void setLastBoardPosition(Point lastBoardPosition) {
 		this.lastBoardPosition = lastBoardPosition;
 	}
+	
+	public int getBoardEmptySpaces() {
+		return boardEmptySpaces;
+	}
+
+	public void setBoardEmptySpaces(int boardEmptySpaces) {
+		this.boardEmptySpaces = boardEmptySpaces;
+	}
+
 	
 	/*
 	public static void main(String[] args) 

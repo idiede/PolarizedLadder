@@ -72,9 +72,18 @@ public class AIPlayer extends Player{
 	private Point move(Board board, SearchLists searchList)
 	{
 		// local variables
-        
 		int startTreeDepth = 1;
+        if(board.getBoardEmptySpaces() > 30){
+        	maxDepth = 2;
+        }
+        else if(board.getBoardEmptySpaces() > 20){  
         maxDepth = 3;
+        }
+        
+        else{
+        	
+        	maxDepth = 4;
+        }
         // create new tree with board
 		Tree<Board> searchTree = createTree(board);
         
