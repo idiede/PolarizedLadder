@@ -26,7 +26,7 @@ public class MiniMaxAIPlayer {
             Board	boardTemp = it.next().getData();
 			maxtemp =  boardTemp.getHeuristic();
 			if(maxtemp != 0){
-			if(maxtemp > max){
+			if(maxtemp >= max){
 				 maxBoard = boardTemp;
 				 max = maxtemp;
 				 }
@@ -53,7 +53,7 @@ public class MiniMaxAIPlayer {
 		{
 			Board	boardTemp = it.next().getData();
 			mintemp =  boardTemp.getHeuristic();
-			if(mintemp < min){
+			if(mintemp <= min){
 				minBoard = boardTemp;
 			    min = mintemp;	
 			}

@@ -117,8 +117,10 @@ public class AIPlayer extends Player{
 			
 				if ( newBoard.setObjectPosition(nextPosition) )
 				{	
-					newBoard.setHeuristic(heuristics.calculate( (Player) aip, this.p, newBoard) );       // calculate next move heuristics (at leaves only)
-					//System.out.println("H from building tree " + newBoard.getHeuristic());
+					newBoard.setHeuristic(heuristics.calculate( (Player) aip, this.p, newBoard) );
+					newBoard.printBoard();
+					// calculate next move heuristics (at leaves only)
+					System.out.println("H from building tree " + newBoard.getHeuristic());
 					// add next move child node to tree
 					Node<Board> nextChild = new Node<Board>();
 					nextChild.setParent(parentNode);
@@ -150,7 +152,7 @@ public class AIPlayer extends Player{
 	
 				if ( newBoard.setObjectPosition(nextPosition) )
 				{
-					newBoard.printBoard();
+					//newBoard.printBoard();
 					
 					// add next move child node to tree
 					Node<Board> nextChild = new Node<Board>();
