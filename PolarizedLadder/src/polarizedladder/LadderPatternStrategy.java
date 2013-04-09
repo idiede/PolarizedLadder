@@ -42,8 +42,8 @@ public class LadderPatternStrategy extends GameHeuristics
 					numPossLadders += detectPossibleLadders( playerToken, opponentToken, board, new Point(jFrom, i) );
 					ladderDiscs	   += numberOfLadderDiscs( playerToken, opponentToken, board, new Point(jFrom, i) );
 
-					System.out.printf("P1 Ladders = %d\n", numPossLadders);
-					System.out.printf("P1 Ladder Discs = %d\n", ladderDiscs);
+				//	System.out.printf("P1 Ladders = %d\n", numPossLadders);
+				//	System.out.printf("P1 Ladder Discs = %d\n", ladderDiscs);
 				}
 				else if ( (board[i][jFrom]).equalsIgnoreCase(opponentToken) )
 				{
@@ -51,8 +51,8 @@ public class LadderPatternStrategy extends GameHeuristics
 					numPossLadders -= detectPossibleLadders( opponentToken, playerToken, board, new Point(jFrom, i) );
 					ladderDiscs    -= numberOfLadderDiscs( opponentToken, playerToken, board, new Point(jFrom, i) );
 
-					System.out.printf("P2 Ladders = %d\n", numPossLadders);
-					System.out.printf("P2 Ladder Discs = %d\n", ladderDiscs);
+				//	System.out.printf("P2 Ladders = %d\n", numPossLadders);
+				//	System.out.printf("P2 Ladder Discs = %d\n", ladderDiscs);
 				}
 			}
 		}

@@ -118,7 +118,7 @@ public class AIPlayer extends Player{
 				if ( newBoard.setObjectPosition(nextPosition) )
 				{	
 					newBoard.setHeuristic(heuristics.calculate( (Player) aip, this.p, newBoard) );       // calculate next move heuristics (at leaves only)
-					
+					//System.out.println("H from building tree " + newBoard.getHeuristic());
 					// add next move child node to tree
 					Node<Board> nextChild = new Node<Board>();
 					nextChild.setParent(parentNode);
@@ -126,15 +126,16 @@ public class AIPlayer extends Player{
 					parentNode.addChild(nextChild);
 					
 				}
-				else
-				{
-					System.out.println("not created" );
-				}
+			//	else
+			//	{
+			//		System.out.println("not created" );
+			//	}
 			}
 		
-			miniMaxMove(parentNode, depthOfTree);	// minimax
+	    	miniMaxMove(parentNode, depthOfTree);	// minimax
 
 		}
+	
 		else
 		{
 			while (openPoints.hasNext())
@@ -176,31 +177,31 @@ public void miniMaxMove(Node<Board> parentNode, int depthOfTree){
 		Board maxBoard = minimax.getMaxMove(parentNode);
 	    parentNode.setData(maxBoard);
 	    nextBoard = maxBoard;
+	    System.out.println("MiniMax Best Move " + maxBoard.getHeuristic() + " - depth - " + depthOfTree);
+	    return;
 	}
-	else
-	{
 	      //if depth % 2 == 1 then max
 		if(depthOfTree%2 == 1){
 			
 			Board maxBoard = minimax.getMaxMove(parentNode);
-			maxBoard.printBoard();
+			//maxBoard.printBoard();
 			parentNode.setHeuristic(maxBoard.getHeuristic());
 			
-			System.out.println("MiniMax " + maxBoard.getHeuristic()); // + parentNode.getChildren().size() + " leaf nodes." );
-			System.out.println("Created: " + parentNode.getChildren().size() + " leaf nodes." );
+		//	System.out.println("MiniMax Max Move " + maxBoard.getHeuristic() + " - depth - " + depthOfTree); // + parentNode.getChildren().size() + " leaf nodes." );
+		//	System.out.println("Created: " + parentNode.getChildren().size() + " leaf nodes." );
 			miniMaxMove(parentNode.getParent(), depthOfTree-1);
 		
-		} else {
+		} else if(depthOfTree%2 == 0){
 			
 			Board minBoard = minimax.getMinMove(parentNode);
 		//	minBoard.printBoard();
 			
 			parentNode.setHeuristic(minBoard.getHeuristic());
-			System.out.println("MiniMax " + minBoard.getHeuristic()); // + parentNode.getChildren().size() + " leaf nodes." );
-			System.out.println("Created: " + parentNode.getChildren().size() + " leaf nodes." );
+		//	System.out.println("MiniMax Min Move " + minBoard.getHeuristic() + " " + depthOfTree); // + parentNode.getChildren().size() + " leaf nodes." );
+		//	System.out.println("Created: " + parentNode.getChildren().size() + " leaf nodes." );
 		    miniMaxMove(parentNode.getParent(), depthOfTree-1);
 		}
-	}
+	
 }
 
 public int getMaxDepth() {

@@ -12,31 +12,38 @@ public class MiniMaxAIPlayer {
 
 	public Board getMaxMove(Node<Board> n){
 		
-		int max =  0;
-		int temp = 0;
-
+		int max =  Integer.MIN_VALUE;
+		int maxtemp = Integer.MIN_VALUE;//must be some other number???
+    
+        
 		Iterator<Node<Board>> it = n.getChildren().iterator();
 		maxBoard =it.next().getData(); 
 		max = maxBoard.getHeuristic();
-		
+		//System.out.println("h  from minimax " + maxBoard.getHeuristic());		
 
 		while( it.hasNext() )
 		{
             Board	boardTemp = it.next().getData();
-			temp =  boardTemp.getHeuristic();
-			if(temp > max){
+			maxtemp =  boardTemp.getHeuristic();
+			if(maxtemp != 0){
+			if(maxtemp > max){
 				 maxBoard = boardTemp;
-				 max = temp;
+				 max = maxtemp;
 				 }
-			//System.out.println("h" + boardTemp.getHeuristic());
+		    }
+			n.getData().setHeuristic(max);
+			maxBoard.setHeuristic(max);
+			
 		}
+		//maxBoard = n.getData();
+		//System.out.println("h  from max " + n.getData().getHeuristic());
 		return maxBoard;
 	}
 
 	public Board getMinMove(Node<Board> n){
 
-		int min =  0;
-		int temp = 0;
+		int min =  Integer.MAX_VALUE;
+		int mintemp = Integer.MAX_VALUE;
 
 		Iterator<Node<Board>> it = n.getChildren().iterator();
 		minBoard =it.next().getData(); 
@@ -45,13 +52,16 @@ public class MiniMaxAIPlayer {
 		while( it.hasNext() )
 		{
 			Board	boardTemp = it.next().getData();
-			temp =  boardTemp.getHeuristic();
-			if(temp < min){
+			mintemp =  boardTemp.getHeuristic();
+			if(mintemp < min){
 				minBoard = boardTemp;
-			    min = temp;	
+			    min = mintemp;	
 			}
+			n.getData().setHeuristic(min);
+			minBoard.setHeuristic(min);
+			//System.out.println("h  from min " + minBoard.getHeuristic());
 		}
-		
+		//System.out.println("h  from min " + n.getData().getHeuristic());
 		return minBoard;
 
 	}
