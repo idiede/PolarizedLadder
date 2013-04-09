@@ -72,7 +72,7 @@ public class AIPlayer extends Player{
 		// local variables
         
 		int startTreeDepth = 1;
-        maxDepth = 2;
+        maxDepth = 3;
         // create new tree with board
 		Tree<Board> searchTree = createTree(board);
         
@@ -118,9 +118,9 @@ public class AIPlayer extends Player{
 				if ( newBoard.setObjectPosition(nextPosition) )
 				{	
 					newBoard.setHeuristic(heuristics.calculate( (Player) aip, this.p, newBoard) );
-					newBoard.printBoard();
+				//	newBoard.printBoard();
 					// calculate next move heuristics (at leaves only)
-					System.out.println("H from building tree " + newBoard.getHeuristic());
+				//	System.out.println("H from building tree " + newBoard.getHeuristic());
 					// add next move child node to tree
 					Node<Board> nextChild = new Node<Board>();
 					nextChild.setParent(parentNode);
