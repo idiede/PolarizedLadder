@@ -84,7 +84,7 @@ public class LadderPatternStrategy extends GameHeuristics
 
 						if (currLadderBlocked)
 						{
-							System.out.printf("Current Ladder Blocked: row = %d, col=%d\n", row, col);
+						//	System.out.printf("Current Ladder Blocked: row = %d, col=%d\n", row, col);
 							break;
 						}
 					}
@@ -139,7 +139,7 @@ public class LadderPatternStrategy extends GameHeuristics
 						if (currLadderBlocked)
 						{
 							numOfLadDiscsDetected 	= 0;	// do not count blocked ladders
-							System.out.printf("Current Ladder Blocked: row = %d, col=%d\n", row, col);
+						//	System.out.printf("Current Ladder Blocked: row = %d, col=%d\n", row, col);
 							break;
 						}
 					}
@@ -198,7 +198,7 @@ public class LadderPatternStrategy extends GameHeuristics
 			}
 
 			// ladder blocked
-			System.out.println("Left Ladder Blocked!");
+		//	System.out.println("Left Ladder Blocked!");
 
 			return true;
 		}
@@ -220,7 +220,7 @@ public class LadderPatternStrategy extends GameHeuristics
 			}
 
 			// ladder blocked
-			System.out.println("Right Ladder Blocked!");
+		//	System.out.println("Right Ladder Blocked!");
 
 			return true;
 		}
@@ -235,7 +235,7 @@ public class LadderPatternStrategy extends GameHeuristics
 				!(board[boardPoint.y - 1][boardPoint.x - 1].equalsIgnoreCase(opponentToken)) &&
 				(boardPoint.y - 1 == 1) )  
 		{
-			System.out.println("Base of Right Ladder Polarized!");
+		//	System.out.println("Base of Right Ladder Polarized!");
 			return true;
 		}
 
@@ -244,7 +244,7 @@ public class LadderPatternStrategy extends GameHeuristics
 				(boardPoint.y - 1 == 1) ) 
 
 		{
-			System.out.println("Base of Left Ladder Polarized!");
+		//	System.out.println("Base of Left Ladder Polarized!");
 			return true;
 		}
 

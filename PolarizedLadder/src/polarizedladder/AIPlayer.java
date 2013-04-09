@@ -73,16 +73,19 @@ public class AIPlayer extends Player{
 	{
 		// local variables
 		int startTreeDepth = 1;
-        if(board.getBoardEmptySpaces() > 30){
+        if(board.getBoardEmptySpaces() > 25){
         	maxDepth = 2;
+        	System.out.println("Depth : " + maxDepth);
         }
-        else if(board.getBoardEmptySpaces() > 20){  
+        else if(board.getBoardEmptySpaces() > 15){  
         maxDepth = 3;
+        System.out.println("Depth : " + maxDepth);
         }
         
         else{
         	
         	maxDepth = 4;
+        	System.out.println("Depth : " + maxDepth);
         }
         // create new tree with board
 		Tree<Board> searchTree = createTree(board);
@@ -190,7 +193,7 @@ public void miniMaxMove(Node<Board> parentNode, int depthOfTree){
 		Board maxBoard = minimax.getMaxMove(parentNode);
 	    parentNode.setData(maxBoard);
 	    nextBoard = maxBoard;
-	    System.out.println("MiniMax Best Move " + maxBoard.getHeuristic() + " - depth - " + depthOfTree);
+	   // System.out.println("MiniMax Best Move " + maxBoard.getHeuristic() + " - depth - " + depthOfTree);
 	    return;
 	}
 	      //if depth % 2 == 1 then max
