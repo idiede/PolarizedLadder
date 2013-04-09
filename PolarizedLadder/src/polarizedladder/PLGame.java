@@ -7,6 +7,9 @@ package polarizedladder;
 
 import java.awt.Point;
 import java.util.Scanner;
+import java.util.Calendar;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class PLGame {
 
@@ -99,7 +102,14 @@ public class PLGame {
 
 			} else {
 
+				Calendar calStartTime = Calendar.getInstance();		// obtain start time
+				
 				nextAIPlayerMove(players, detectWin, board, getPlayerTurn());
+				
+				Calendar calEndTime	= Calendar.getInstance();		// obtain end time
+				System.out.printf("AI Move Duration = %.2f %s\n", 	// output move calculation duration
+						(float) (calEndTime.getTimeInMillis() - calStartTime.getTimeInMillis()) / 1000, 
+						"seconds"); 
 				
                 //////////////////////////////////////////////////////////////////debug first
 				/*	Point AIPlayerMove = ((AIPlayer) players[1]).doAIPlayerTurn(players[1]);
@@ -141,7 +151,14 @@ public class PLGame {
 
 			if (getPlayerTurn() == 0) {	
 
+				Calendar calStartTime = Calendar.getInstance();		// obtain start time
+				
 				nextAIPlayerMove(players, detectWin, board, getPlayerTurn());
+				
+				Calendar calEndTime	= Calendar.getInstance();		// obtain end time
+				System.out.printf("AI Move Duration = %.2f %s\n", 	// output move calculation duration
+						(float) (calEndTime.getTimeInMillis() - calStartTime.getTimeInMillis()) / 1000, 
+						"seconds"); 
 
 			} else {
 				
@@ -176,14 +193,14 @@ public class PLGame {
 
 
 	private void nextAIPlayerMove(Player[] players, WinPatternStrategy detectWin, Board board, int playerTurn){
-
+		
 		Point AIPlayerMove = ((AIPlayer) players[playerTurn]).doAIPlayerTurn((AIPlayer)players[playerTurn], players[getNextPlayerTurn(playerTurn)], searchList);
-
+		
 		if ( players[playerTurn].setDisc(AIPlayerMove.y, AIPlayerMove.x) == false) 
 		{
 			((AIPlayer) players[playerTurn]).doAIPlayerTurn((AIPlayer)players[playerTurn], players[getNextPlayerTurn(playerTurn)], searchList);
 		}
-
+		
 		if ( detectWin.detectLadder(players[playerTurn].getPlayerToken(), 
 				players[playerTurn].getPlayerToken(), AIPlayerMove) )
 		{
