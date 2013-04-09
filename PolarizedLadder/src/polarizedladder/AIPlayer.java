@@ -12,15 +12,15 @@ public class AIPlayer extends Player{
 	private String AIPlayerString;
 	private String OpponentString;
 	private int maxDepth;
+	private MiniMaxAIPlayer minimax;
     
-	
-
-
 	private LadderPatternStrategy heuristics;
 	
 	private AIPlayer aip;
 	private Player p;
     
+	private Board nextBoard;
+	
 	public AIPlayer(){
 		
 		super();
@@ -32,8 +32,9 @@ public class AIPlayer extends Player{
 		super.playerToken = playerToken;
 		super.discs 	  = discs;
 		this.board        = board;
+		nextBoard		  = new Board();
 		heuristics 		  = new LadderPatternStrategy();
-        
+        minimax = new MiniMaxAIPlayer();
 		AIPlayerToken 	  = playerToken;
 		AIPlayerString 	  = String.valueOf(AIPlayerToken);
 		
@@ -76,10 +77,10 @@ public class AIPlayer extends Player{
 		Tree<Board> searchTree = createTree(board);
         
         // generate all potential next moves
-        createStateSpace(searchTree.getRoot(), searchList, startTreeDepth, AIPlayerString);
+        createStateSpace(searchTree.getRoot(), searchList, startTreeDepth, AIPlayerString, board);
         
-        return new Point(1, 1);																			// TODO: invalid move should not be returned. only valid moves should be returned.
-        //		  or should be ignored at client object (i.e. null)
+        return nextBoard.getLastBoardPosition();
+
 	}
 	
 	public Tree<Board> createTree(Board board)
@@ -96,12 +97,11 @@ public class AIPlayer extends Player{
 	
 
 	
-	public void createStateSpace(Node<Board> parentNode, SearchLists searchList, int depthOfTree, String currPlayer)
+	public void createStateSpace(Node<Board> parentNode, SearchLists searchList, int depthOfTree, String currPlayer, Board oldState)
 	{
 		// generate all potential next moves
-        Iterator<Point> openPoints = searchList.getIterator();														// TODO: BUG? Hash table needs to be new across search spaces
-       
-        
+        Iterator<Point> openPoints = searchList.getIterator();														
+      
         // and shared with sub-trees.
 		if (depthOfTree == maxDepth)
 		{
@@ -109,22 +109,31 @@ public class AIPlayer extends Player{
 			{
 				// prepare new board
 				Board newBoard = new Board();
-				newBoard.setState(board.cloneArray());
+				newBoard.setState(oldState.cloneArray());
                 
 				// generate next move
 				Point nextPoint 	  = openPoints.next();
 				Position nextPosition = new Position(nextPoint, currPlayer);							// get next move
-				newBoard.setObjectPosition(nextPosition);
-				newBoard.heuristic 	  = heuristics.calculate((Player) aip, this.p, newBoard);         	// calculate next move heuristics (at leaves only)
-               //?? newBoard.setHeuristic(newBoard.heuristic);
-				
-				// add next move child node to tree
-				Node<Board> nextChild = new Node<Board>();
-				nextChild.setData(newBoard);
-				parentNode.addChild(nextChild);
+			
+				if ( newBoard.setObjectPosition(nextPosition) )
+				{	
+					newBoard.setHeuristic(heuristics.calculate( (Player) aip, this.p, newBoard) );       // calculate next move heuristics (at leaves only)
+					
+					// add next move child node to tree
+					Node<Board> nextChild = new Node<Board>();
+					nextChild.setParent(parentNode);
+					nextChild.setData(newBoard);
+					parentNode.addChild(nextChild);
+					
+				}
+				else
+				{
+					System.out.println("not created" );
+				}
 			}
+		
+			miniMaxMove(parentNode, depthOfTree);	// minimax
 
-			System.out.println("Created: " + parentNode.getChildren().size() + " leaf nodes." );
 		}
 		else
 		{
@@ -132,17 +141,22 @@ public class AIPlayer extends Player{
 			{
 				// prepare new board
 				Board newBoard = new Board();
-				newBoard.setState(board.cloneArray());
-                
+				newBoard.setState(oldState.cloneArray());
+				
 				// generate next move
 				Point nextPoint 	  = openPoints.next();
 				Position nextPosition = new Position(nextPoint, currPlayer);							// get next move
-				newBoard.setObjectPosition(nextPosition);
-                
-				// add next move child node to tree
-				Node<Board> nextChild = new Node<Board>();
-				nextChild.setData(newBoard);
-				parentNode.addChild(nextChild);
+	
+				if ( newBoard.setObjectPosition(nextPosition) )
+				{
+					newBoard.printBoard();
+					
+					// add next move child node to tree
+					Node<Board> nextChild = new Node<Board>();
+					nextChild.setParent(parentNode);
+					nextChild.setData(newBoard);
+					parentNode.addChild(nextChild);
+				}
 			}
 
         	for (Node<Board> childNode : parentNode.getChildren())
@@ -150,11 +164,44 @@ public class AIPlayer extends Player{
         		// populate child sub-tree
         		String nextToken = (currPlayer == AIPlayerString) ? OpponentString : AIPlayerString;
         		
-        		createStateSpace(childNode, searchList, depthOfTree + 1, nextToken);
+        		createStateSpace(childNode, searchList, depthOfTree + 1, nextToken, childNode.getData());
         	}
 		}
 	}
 
+public void miniMaxMove(Node<Board> parentNode, int depthOfTree){
+	
+	if(depthOfTree == 1)
+	{
+		Board maxBoard = minimax.getMaxMove(parentNode);
+	    parentNode.setData(maxBoard);
+	    nextBoard = maxBoard;
+	}
+	else
+	{
+	      //if depth % 2 == 1 then max
+		if(depthOfTree%2 == 1){
+			
+			Board maxBoard = minimax.getMaxMove(parentNode);
+			maxBoard.printBoard();
+			parentNode.setHeuristic(maxBoard.getHeuristic());
+			
+			System.out.println("MiniMax " + maxBoard.getHeuristic()); // + parentNode.getChildren().size() + " leaf nodes." );
+			System.out.println("Created: " + parentNode.getChildren().size() + " leaf nodes." );
+			miniMaxMove(parentNode.getParent(), depthOfTree-1);
+		
+		} else {
+			
+			Board minBoard = minimax.getMinMove(parentNode);
+		//	minBoard.printBoard();
+			
+			parentNode.setHeuristic(minBoard.getHeuristic());
+			System.out.println("MiniMax " + minBoard.getHeuristic()); // + parentNode.getChildren().size() + " leaf nodes." );
+			System.out.println("Created: " + parentNode.getChildren().size() + " leaf nodes." );
+		    miniMaxMove(parentNode.getParent(), depthOfTree-1);
+		}
+	}
+}
 
 public int getMaxDepth() {
 	return maxDepth;
@@ -163,4 +210,6 @@ public int getMaxDepth() {
 public void setMaxDepth(int maxDepth) {
 	this.maxDepth = maxDepth;
 }
+
+
 }

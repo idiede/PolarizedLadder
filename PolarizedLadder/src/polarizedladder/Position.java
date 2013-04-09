@@ -15,7 +15,7 @@ public class Position {
 	  this.point.x = i;
 	  this.point.y = j;
 	  this.mark = mark;
-	 
+	  this.point = new Point(i, j);
  }
 
  public Position(Point p, String mark){

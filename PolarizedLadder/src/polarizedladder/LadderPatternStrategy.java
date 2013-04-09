@@ -281,23 +281,23 @@ public class LadderPatternStrategy extends GameHeuristics
 
 	public static void main(String[] args) 
 	{
-		/*
+		
 			// Heuristics Test Case 1 
 			Board boardA = new Board();			// state a
 
-			boardA.setPosition(2, 8, "*");		// player positions
-			boardA.setPosition(3, 8, "*");
-			boardA.setPosition(3, 9, "*");
-			boardA.setPosition(4, 9, "*");
+			boardA.setPosition(2, 2, "*");		// player positions
+			boardA.setPosition(3, 2, "*");
+			//boardA.setPosition(9, 3, "*");
+			//boardA.setPosition(9, 4, "*");
 
-			boardA.setPosition(3, 6, "o");		// opponent positions
-			boardA.setPosition(3, 7, "o");
-			boardA.setPosition(4, 7, "o");
-			boardA.setPosition(4, 8, "o");
+			boardA.setPosition(7, 3, "o");		// opponent positions
+			boardA.setPosition(8, 6, "o");
+			//boardA.setPosition(7, 4, "o");
+			//boardA.setPosition(8, 4, "o");
 
 			boardA.printBoard();
 
-			GameHeuristics hA = new GameHeuristics();
+			LadderPatternStrategy hA = new LadderPatternStrategy();
 			Player pA 		 = new Player("Player 1", '*', 22, boardA);
 			Player oA 		 = new Player("Player 1", 'o', 22, boardA);
 			int scoreA 		 = hA.calculate(pA, oA, boardA);
@@ -305,25 +305,25 @@ public class LadderPatternStrategy extends GameHeuristics
 
 			Board boardB = new Board();			// state b
 
-			boardB.setPosition(2, 8, "*");		// player positions
-			boardB.setPosition(3, 8, "*");
-			boardB.setPosition(3, 9, "*");
-			boardB.setPosition(5, 8, "*");
+			boardB.setPosition(8, 2, "*");		// player positions
+			boardB.setPosition(8, 3, "*");
+			boardB.setPosition(9, 3, "*");
+			boardB.setPosition(8, 5, "*");
 
-			boardB.setPosition(3, 6, "o");		// opponent positions
-			boardB.setPosition(3, 7, "o");
-			boardB.setPosition(4, 7, "o");
-			boardB.setPosition(4, 8, "o");
+			boardB.setPosition(6, 3, "o");		// opponent positions
+			boardB.setPosition(7, 3, "o");
+			boardB.setPosition(7, 4, "o");
+			boardB.setPosition(8, 4, "o");
 
 			boardB.printBoard();
 
-			GameHeuristics hB = new GameHeuristics();
+			LadderPatternStrategy hB = new LadderPatternStrategy();
 			Player pB 		  = new Player("Player 1", '*', 22, boardB);
 			Player oB 		  = new Player("Player 2", 'o', 22, boardB);
 			int scoreB		  = hB.calculate(pB, oB, boardB);
 
 			System.out.printf("Board B Heuristics Score = %d\n", scoreB);
-		 */
+		 
 
 		/*
 			// Heuristics Test Case 2 
