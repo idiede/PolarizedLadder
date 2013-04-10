@@ -83,7 +83,7 @@ public class AIPlayer extends Player{
         System.out.println("Depth : " + maxDepth);
         }
         
-        else if(emptySpaces < 4){
+        else if(emptySpaces > 4){
         	
         	
         	maxDepth = 4;
@@ -93,6 +93,7 @@ public class AIPlayer extends Player{
         else {
         	//decrease by depth each time??
         	maxDepth = 1;
+        	System.out.println("Depth : " + maxDepth);
         }
         // create new tree with board
 		Tree<Board> searchTree = createTree(board);
