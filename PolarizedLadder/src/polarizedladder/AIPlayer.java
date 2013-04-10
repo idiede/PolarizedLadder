@@ -73,19 +73,26 @@ public class AIPlayer extends Player{
 	{
 		// local variables
 		int startTreeDepth = 1;
-        if(board.getBoardEmptySpaces() > 32){
+		int emptySpaces = board.getBoardEmptySpaces();
+        if(emptySpaces > 32){
         	maxDepth = 2;
         	System.out.println("Depth : " + maxDepth);
         }
-        else if(board.getBoardEmptySpaces() > 22){  
+        else if(emptySpaces > 12){  
         maxDepth = 3;
         System.out.println("Depth : " + maxDepth);
         }
         
-        else{
+        else if(emptySpaces < 4){
+        	
         	
         	maxDepth = 4;
         	System.out.println("Depth : " + maxDepth);
+        }
+        
+        else {
+        	//decrease by depth each time??
+        	maxDepth = 1;
         }
         // create new tree with board
 		Tree<Board> searchTree = createTree(board);

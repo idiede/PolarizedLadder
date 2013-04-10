@@ -44,7 +44,7 @@ public class MiniMaxAIPlayer {
 
 		int min =  Integer.MAX_VALUE;
 		int mintemp = Integer.MAX_VALUE;
-
+        //we need to shallow the search at the end of the game ie depth at 3 points = 2 at 2 = 1 etc so....
 		Iterator<Node<Board>> it = n.getChildren().iterator();
 		minBoard =it.next().getData(); 
 		min = minBoard.getHeuristic();

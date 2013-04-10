@@ -8,7 +8,7 @@ public class LadderPatternStrategy extends GameHeuristics
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	private int[] ladderDiscWeights  = {0, 1, 2, 3, 100, 1000};		// weights for 0, 1, 2, 3, 4, or 5 ladder discs
+	private int[] ladderDiscWeights  = {0, 1, 2, 20, 100, 1000};		// weights for 0, 1, 2, 3, 4, or 5 ladder discs
 
 	/* TODO: validate - there is no polarity block on sides
 		private Point leftSidePolarity[] = { new Point(1,1), new Point(2,2), new Point(3,3), 
