@@ -73,11 +73,11 @@ public class AIPlayer extends Player{
 	{
 		// local variables
 		int startTreeDepth = 1;
-        if(board.getBoardEmptySpaces() > 25){
+        if(board.getBoardEmptySpaces() > 32){
         	maxDepth = 2;
         	System.out.println("Depth : " + maxDepth);
         }
-        else if(board.getBoardEmptySpaces() > 15){  
+        else if(board.getBoardEmptySpaces() > 22){  
         maxDepth = 3;
         System.out.println("Depth : " + maxDepth);
         }
