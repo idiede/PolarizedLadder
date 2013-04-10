@@ -179,8 +179,9 @@ public class PLGame {
 			playerMove = players[playerTurn].doPlayerTurn(players[playerTurn]);
 		}
 
+		int opPlayerTurn = (playerTurn == 0) ? 1 : 0;
 		if ( detectWin.detectLadder(players[playerTurn].getPlayerToken(), 
-				players[playerTurn].getPlayerToken(), playerMove) ){
+				players[opPlayerTurn].getPlayerToken(), playerMove) ){
 
 			printGameOver( players[playerTurn], board);
 			setGameOver(true);
@@ -201,8 +202,9 @@ public class PLGame {
 			((AIPlayer) players[playerTurn]).doAIPlayerTurn((AIPlayer)players[playerTurn], players[getNextPlayerTurn(playerTurn)], searchList);
 		}
 		
+		int opPlayerTurn = (playerTurn == 0) ? 1 : 0;
 		if ( detectWin.detectLadder(players[playerTurn].getPlayerToken(), 
-				players[playerTurn].getPlayerToken(), AIPlayerMove) )
+				players[opPlayerTurn].getPlayerToken(), AIPlayerMove) )
 		{
 
 			printGameOver( players[playerTurn], board);
