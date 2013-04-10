@@ -7,7 +7,7 @@ $ make
 
 then command
 
- $ java <name of game> ???
+ $ java PolarizedLadder
 
 
 For Windows if make is not available:
@@ -15,7 +15,7 @@ For Windows if make is not available:
 c: cd <path-name-to-directory>
 run
 c:\javac -g *.java
-c:\java  <name of game>??
+c:\java  PolarizedLadder
 
 To play the game.
 
