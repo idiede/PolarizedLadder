@@ -1,21 +1,13 @@
 
-   Polarized Ladder Game - Incorporates the Minimax game Search Algorithm.
 
 
+To compile and run in Mac OS X Linux and Windows from a terminal (ignore the $ it is there to show bash shell)
 
-
-To run the game just double click on the .jar file in the folder PolarizedLadder and the game will launch.
-
-
-To compile and run in Mac OS X and Linux from a terminal (ignore the $ it is there to show bash shell)
-
-There is are .java files in the folder PLGame
- 
-$  cd <path-name-to-directory-PLGame>
-
+$ cd <path-name-to-directory-PLGame>
 run command 
 
 javac -g *.java
+
 
 then command
 
@@ -24,12 +16,12 @@ $ java Main
 
 For Windows
 
-c: cd <path-name-to-directory PLGame>
+c: cd <path-name-to-directory>
 run
 c:\javac -g *.java
-c:\java  Main
+c:\java  PLGame
 
-This will launch the game
+This will lauch the game
 
 
 If at any time you want to recompile with a clean build run:
@@ -69,6 +61,7 @@ example:
 Please enter your next move Player One (ex. A5):e1  //wrong order
 Please enter your next move Player One (ex. 5A):1Z  //out of bounds
 Please enter your next move Player One (ex. 2A):1e // right 
+
 
 
 
