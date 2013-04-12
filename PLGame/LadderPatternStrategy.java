@@ -1,5 +1,4 @@
 
-
 import java.awt.Point;
 
 public class LadderPatternStrategy extends GameHeuristics

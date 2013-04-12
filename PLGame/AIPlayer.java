@@ -4,6 +4,7 @@ import java.awt.Point;
 import java.util.Iterator;
 
 
+
 public class AIPlayer extends Player{
     
 	private char AIPlayerToken;

@@ -12,7 +12,7 @@ java -jar PLGame.jar
 Example:
 
 Windows: 	C:\java -jar PLGame.jar
-Unix		$java -jar PLGame.jar
+Unix		$ java -jar PLGame.jar
 
 
 
