@@ -4,7 +4,16 @@
 
 
 
-To run the game just double click on the .jar file in the folder PolarizedLadder and the game will launch.
+To run the game from the .jar file provided execute the following statement from the 
+working directory where the file resides (PolarizedLadder/PolarizedLadder/src/src): 
+
+java -jar PLGame.jar
+
+Example:
+
+Windows: 	C:\java -jar PLGame.jar
+Unix		$java -jar PLGame.jar
+
 
 
 To compile and run in Mac OS X and Linux from a terminal (ignore the $ it is there to show bash shell)
