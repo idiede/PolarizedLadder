@@ -5,7 +5,7 @@
 
 
 To run the game from the .jar file provided execute the following statement from the 
-working directory where the file resides (PolarizedLadder/PolarizedLadder/src/): 
+working directory where the file resides (the PolarizedLadder main directory): 
 
 java -jar PLGame.jar
 
