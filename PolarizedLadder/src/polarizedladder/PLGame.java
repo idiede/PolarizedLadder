@@ -237,21 +237,21 @@ public class PLGame {
 
 			// instantiate human players
 			players[0] = new Player("Player One", 'o', 22, board);
-			players[1] = new Player("Player Two", Character.toChars(8226)[0], 22, board);
+			players[1] = new Player("Player Two", '*', 22, board);
 		}
 
 		if(gameType == 2){
 
 			// instantiate human player(1) and AIPlayer(2)
 			players[0] = new Player("Player One", 'o', 22, board);
-			players[1] = new AIPlayer("Player Two", Character.toChars(8226)[0], 22, board);
+			players[1] = new AIPlayer("Player Two", '*', 22, board);
 		}
 
 		if(gameType == 3){
 
 			// instantiate AIPlayer(1) human player(2) 
 			players[0] = new AIPlayer("Player One", 'o', 22, board);
-			players[1] = new Player("Player Two", Character.toChars(8226)[0], 22, board);
+			players[1] = new Player("Player Two", '*', 22, board);
 		}
 
 		//if(type == 4){
